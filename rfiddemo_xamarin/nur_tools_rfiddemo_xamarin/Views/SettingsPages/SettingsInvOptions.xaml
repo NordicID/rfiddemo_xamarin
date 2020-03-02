@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup" 
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="nur_tools_rfiddemo_xamarin.Views.SettingsPages.SettingsInvOptions">
+
+    <StackLayout Margin="12"
+                 Padding="24"
+                 BackgroundColor="White"
+                 HorizontalOptions="Center"
+                 VerticalOptions="Center">
+        <Label Text="Inventory options" FontSize="16" HorizontalOptions="Center"/>
+        <Grid x:Name="InvGrid" BackgroundColor="WhiteSmoke">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />               
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label  Grid.Row="0" Grid.Column="0" Text="Use Inventory Read:" TextColor="Black" FontSize="Small" Padding="5" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None"></Label>
+            <Switch x:Name="EnableIR" Grid.Row="0" Grid.Column="1" HorizontalOptions="End" Toggled="OnSwitchEnableIRChanged"/>            
+
+            <Label  Grid.Row="1" Grid.Column="0" Text="Use InventoryEx:" TextColor="Black" FontSize="Small" Padding="5" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None"></Label>
+            <Switch x:Name="EnableInvEx" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" Toggled="OnSwitchEnableFilterChanged"/>            
+
+            <Label  Grid.Row="2" Grid.Column="0" Text="Show GS1 'Pure Uri':" TextColor="Black" FontSize="Small" Padding="5" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None"></Label>
+            <Switch x:Name="SwitchShowGs1" Grid.Row="2" Grid.Column="1" HorizontalOptions="End" Toggled="OnSwitchShowGS1Changed"/>
+
+            <Label  Grid.Row="3" Grid.Column="0" Text="Show Only GS1 tags':" TextColor="Black" FontSize="Small" Padding="5" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="None"></Label>
+            <Switch x:Name="SwitchShowOnlyGs1" Grid.Row="3" Grid.Column="1" HorizontalOptions="End" Toggled="OnSwitchShowOnlyGS1Changed"/>
+
+            
+        </Grid>
+
+        <Button BackgroundColor="DodgerBlue"
+                FontSize="20"
+                Text="Close"
+                TextColor="White" Clicked="OnStop"/>
+
+    </StackLayout>
+    
+</pages:PopupPage>

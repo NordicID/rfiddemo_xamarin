@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
+             mc:Ignorable="d"
+             x:Class="nur_tools_rfiddemo_xamarin.Views.BarcodePage">
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal">
+            <Image Source="ic_barcode.png" WidthRequest="55"/>
+            <Label Text="Barcode" VerticalOptions="Center" TextColor="Black" FontSize="Title" />
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical">
+            <Label x:Name ="statusTxt" TextColor="Black" Text="Activate Barcode reading by clicking trigger button or press Start / Stop button."
+                   HorizontalTextAlignment="Center"
+                   FontSize="Medium"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="Center" />
+            <Button x:Name="startButton" Text="Start / Stop" VerticalOptions="End" HorizontalOptions="Center" Clicked="OnStartClicked"></Button>
+            <templates:StatusBar x:Name="MyStatusBar" />
+        </StackLayout>
+        
+    </ContentPage.Content>
+</ContentPage>

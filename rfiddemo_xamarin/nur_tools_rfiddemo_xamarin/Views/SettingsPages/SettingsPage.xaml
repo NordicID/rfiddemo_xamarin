@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
+             mc:Ignorable="d"
+             x:Class="nur_tools_rfiddemo_xamarin.Views.SettingsPage"
+             Title="{Binding Title}"
+             x:Name="BrowseSettingsPage">
+    <NavigationPage.TitleView>         
+        <StackLayout Orientation="Horizontal">            
+            <Image Source="ic_settings.png" WidthRequest="55"/>
+            <Label Text="Settings" VerticalOptions="Center" TextColor="Black" FontSize="Title" />
+        </StackLayout>
+    </NavigationPage.TitleView>
+
+    <StackLayout>
+
+        <ListView x:Name="ItemsListView"
+                ItemsSource="{Binding Items}"
+                VerticalOptions="FillAndExpand"
+                HasUnevenRows="true"
+                RefreshCommand="{Binding LoadItemsCommand}"
+                IsPullToRefreshEnabled="true"
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                CachingStrategy="RecycleElement"
+                ItemSelected="OnSettingsItemSelected">
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+
+                    <ViewCell>
+                        <StackLayout Padding="10" Orientation="Horizontal">
+                            <Image Source="{Binding ImageName}" WidthRequest="40" />
+                            <StackLayout Orientation="Vertical">
+                            <Label Text="{Binding Text}" 
+                                d:Text="{Binding .}"
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource ListItemTextStyle}" 
+                                FontSize="16"
+                                HorizontalOptions="Start"
+                                TextColor="Black"/>
+                            
+                            <Label Text="{Binding Description}" 
+                                d:Text="Item descripton"
+                                LineBreakMode="NoWrap"
+                                HorizontalOptions="Start"
+                                Style="{DynamicResource ListItemDetailTextStyle}"                                
+                                FontSize="13" />
+                            </StackLayout>
+
+                        </StackLayout>
+                    </ViewCell>
+
+
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <templates:StatusBar x:Name="MyStatusBar" />
+
+    </StackLayout>
+</ContentPage>

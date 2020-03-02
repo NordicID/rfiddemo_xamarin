@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
+             mc:Ignorable="d"
+             x:Class="nur_tools_rfiddemo_xamarin.Views.InventoryPage">
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal">
+            <Image Source="ic_inventory.png" WidthRequest="55"/>
+            <Label Text="Inventory" VerticalOptions="Center" TextColor="Black" FontSize="Title" />
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView x:Name="TagsView" RowHeight="60" Margin="10,0"
+            ItemTapped="OnItemTapped"                     
+            ItemsSource="{Binding TagDetails}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout  Orientation="Horizontal" >
+                                <Image Source="ic_tag.png" WidthRequest="25" />
+                                <StackLayout Orientation="Vertical">
+                                    <StackLayout Orientation="Horizontal">
+                                       
+                                        <Label Text="{Binding EPC}"                                
+                                            LineBreakMode="NoWrap"                                
+                                            FontSize="14" 
+                                            HorizontalOptions="Start"
+                                            TextColor="{Binding EPCColor}"/>
+                                        
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Antenna: " TextColor="Black"></Label>
+                                        <Label Text="{Binding Antenna}"                                
+                                            VerticalOptions="Start"                               
+                                            FontSize="12" 
+                                            HorizontalOptions="Start"
+                                            TextColor="DarkGreen"/>
+                                        <Label Text="RSSI" TextColor="Black" FontSize="12"></Label>
+                                        <Label Text="{Binding RSSI}"                                                                            
+                                               
+                                            TextColor="Red"
+                                            FontSize="12" />
+                                        <Label Text="dBm" TextColor="Black" FontSize="12"></Label>
+                                        <ProgressBar ProgressColor="RoyalBlue" Progress="{Binding RSSIScaled}" HorizontalOptions="EndAndExpand">
+                                        </ProgressBar>
+                                    </StackLayout>
+                                </StackLayout>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>               
+           
+            <StackLayout Orientation="Horizontal" Padding="5">
+                <Button Text="START" x:Name="ButInvStart" Clicked="OnStartInventoryClicked"></Button>
+                <Button Text="CLEAR" x:Name="ButInvClear" Clicked="OnClearInventoryClicked"></Button>
+                <Button Text="Options.." x:Name="ButInvOptions" HorizontalOptions="End" Clicked="OnInvOptionsClicked"></Button>
+            </StackLayout>
+
+            <templates:StatusBar x:Name="MyStatusBar" />
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

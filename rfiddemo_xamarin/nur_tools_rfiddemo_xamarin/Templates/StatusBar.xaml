@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"            
+             mc:Ignorable="d"
+             x:Class="nur_tools_rfiddemo_xamarin.Templates.StatusBar"
+             BackgroundColor="{Binding BackgroundColor}" Padding="10" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand"  HeightRequest="25" CornerRadius="0">
+
+    <Label Text="{Binding Text}" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{Binding TextColor}" FontSize="Small"  HorizontalTextAlignment="Center" FontAttributes="Bold">
+
+    </Label>
+</Frame>

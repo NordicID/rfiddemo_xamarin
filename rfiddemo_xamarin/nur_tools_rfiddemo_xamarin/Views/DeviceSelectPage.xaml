@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+              xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
+             mc:Ignorable="d"
+             x:Class="nur_tools_rfiddemo_xamarin.Views.DeviceSelectPage">
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal">
+
+            <Image Source="connection2.png" WidthRequest="45"/>
+            <Label Text="Connection" VerticalOptions="Center" TextColor="Black" FontSize="Title" />
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <StackLayout>
+          
+            <ListView x:Name="MyListView"
+                    ItemsSource="{Binding Items}"
+                    ItemTapped="Handle_ItemTapped"
+                    CachingStrategy="RecycleElement">
+
+                <!--Built in Cells-->
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding .}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+               
+            </ListView>
+
+            <Button Text="TCP Connection" IsVisible="True" x:Name="TCPButton" Clicked="OnConnectTCPClicked"></Button>
+            <Button Text="Disconnect" IsVisible="True" x:Name="DisconnectButton" Clicked="OnDisconnectClicked"></Button>
+            <templates:StatusBar x:Name="MyStatusBar" />             
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

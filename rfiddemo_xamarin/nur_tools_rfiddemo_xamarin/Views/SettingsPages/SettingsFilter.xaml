@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
+             mc:Ignorable="d"
+             x:Class="nur_tools_rfiddemo_xamarin.Views.SettingsPages.SettingsFilter">
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal">
+            <Image Source="ic_settings.png" WidthRequest="55"/>
+            <Label Text="Inventory Filters" VerticalOptions="Center" TextColor="Black" FontSize="Title" />
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Click item to change!"
+                VerticalOptions="Start" 
+                HorizontalOptions="Start" />
+
+            <Grid x:Name="controlGrid" RowSpacing="0" ColumnSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45"/>
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="45" />
+
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Text="Enabled" TextColor="Black" FontSize="Body" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"></Label>
+                <Switch x:Name="SwitchEnable" Grid.Row="0" Grid.Column="0" Toggled="OnFilterEnableSwitch"></Switch>
+                <Button x:Name="ButtonAction" Text="Action" Grid.Row="1" Grid.Column="0" Clicked="OnButtonActionClicked"/>
+                <Button x:Name="ButtonBank" Text="Bank" Grid.Row="2" Grid.Column="0" Clicked="OnButtonBankClicked"/>
+                <Button x:Name="ButtonTarget" Text="Target" Grid.Row="3" Grid.Column="0" Clicked="OnButtonTargetClicked" />
+                <Button x:Name="ButtonAddr" Text="Address (bits)" Grid.Row="4" Grid.Column="0" Clicked="OnButtonAddrClicked" />
+                <Button x:Name="ButtonMask" Text="Mask (hex)" Grid.Row="5" Grid.Column="0"  Clicked="OnButtonMaskClicked"/>
+                <Button x:Name="ButtonLength" Text="Length (bits)" Grid.Row="6" Grid.Column="0"  Clicked="OnButtonLengthClicked"/>
+               
+                <Label Grid.Row="0" Grid.Column="1" x:Name="LblEnabled" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start" FontAttributes="None"></Label>
+                <Label Grid.Row="1" Grid.Column="1" x:Name="LblAction" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start" FontAttributes="None"></Label>
+                <Label Grid.Row="2" Grid.Column="1" x:Name="LblBank" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start" FontAttributes="None"></Label>
+                <Label Grid.Row="3" Grid.Column="1" x:Name="LblTarget" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Start" FontAttributes="None"></Label>
+                <Label Grid.Row="4" Grid.Column="1" x:Name="LblAddr" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Start" FontAttributes="None"></Label>
+                <Label Grid.Row="5" Grid.Column="1" x:Name="LblMask" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Start" FontAttributes="None"></Label>
+                <Label Grid.Row="6" Grid.Column="1" x:Name="LblLength" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start" FontAttributes="None"></Label>
+
+            </Grid>
+            <templates:StatusBar x:Name="MyStatusBar" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

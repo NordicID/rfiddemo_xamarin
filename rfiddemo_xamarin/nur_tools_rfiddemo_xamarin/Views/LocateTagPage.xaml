@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"             
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="nur_tools_rfiddemo_xamarin.Views.LocateTagPage">
+    <!--  You can use any elements here which are extended from Xamarin.Forms.View  -->
+    <StackLayout Margin="12"
+                 Padding="24"
+                 BackgroundColor="White"
+                 HorizontalOptions="Center"
+                 VerticalOptions="Center">
+        
+        <StackLayout>
+            <Label Text="Locating tag.."/>
+            <Label Text="EPC" x:Name="epcText" FontSize="18" HorizontalTextAlignment="Center"/>            
+        </StackLayout>
+        <StackLayout>            
+            <Label Text="%" x:Name="foundPros" FontSize="40" HorizontalTextAlignment="Center"/>
+        </StackLayout>
+
+        <Button BackgroundColor="DodgerBlue"
+                FontSize="30"
+                Text="Stop"
+                TextColor="White" Clicked="OnStop" />
+    </StackLayout>
+</pages:PopupPage>
