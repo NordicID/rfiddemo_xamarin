@@ -15,6 +15,9 @@ In the future, these assemblies going to be publish as NuGet packages at Nuget.o
  Prebuilt folder contains `com.nordicid.rfiddemo_xamarin-Signed.apk` for ready to install in to the Android devices.
  
 As mentioned earlier, development of libraries are still ongoing. Please check updates frequently on this page. In case you need help, please contact to NordicID support. (support@nordicid.com)
+####  Running sample on HH83
+Connecting to internal RFID module: Go to Connection page, press “TCP CONNECTION” button and type: `127.0.0.1:6734/?name=HH83`
+This will be changed in future releases as 'internal" connection.
 
 ### Release notes (1.3.2020)
 - Initial release versions. `..NurApi.Net.Dll 2.0.0` `..Android.dll 1.0.0` `..Support.Dll 1.0.0`
