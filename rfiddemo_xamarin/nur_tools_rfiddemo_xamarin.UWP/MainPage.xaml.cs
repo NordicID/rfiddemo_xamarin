@@ -11,7 +11,7 @@ namespace nur_tools_rfiddemo_xamarin.UWP
 
             LoadApplication(new nur_tools_rfiddemo_xamarin.App());
             nur_tools_rfiddemo_xamarin.App.Nur.Init();
-            nur_tools_rfiddemo_xamarin.App.NurDeviceSearch.Init();
+            //nur_tools_rfiddemo_xamarin.App.NurDeviceSearch.Init();
         }
     }
 }

@@ -50,7 +50,8 @@ namespace nur_tools_rfiddemo_xamarin.Views
             }
             else if (item.itemSettings == SettingsPageItem.InventoryEx)
             {
-                await Navigation.PushAsync(new SettingsPages.SettingsInventoryExtended());
+                //await Navigation.PushAsync(new SettingsPages.SettingsInventoryExtended());
+                await Navigation.PushAsync(new SettingsPages.SettingsInvExt());
             }
             else if (item.itemSettings == SettingsPageItem.Reader)
             {

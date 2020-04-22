@@ -10,7 +10,7 @@
     <NavigationPage.TitleView>
         <StackLayout Orientation="Horizontal">
 
-            <Image Source="connection2.png" WidthRequest="45"/>
+            <Image Source="connection.png" WidthRequest="45"/>
             <Label Text="Connection" VerticalOptions="Center" TextColor="Black" FontSize="Title" />
         </StackLayout>
     </NavigationPage.TitleView>

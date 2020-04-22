@@ -1,50 +1,90 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xamarin.Essentials;
+using Newtonsoft.Json;
 using NurApiDotNet;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Collections.ObjectModel;
+using nur_tools_rfiddemo_xamarin.Templates;
+using static NurApiDotNet.NurApi;
 
 namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SettingsFilter : ContentPage
     {
+        ObservableCollection<ListItem> itemList = new ObservableCollection<ListItem>();
+        InventoryExFilter mFilter;
+        int mIndex;
+
         public SettingsFilter()
-        {
-            InitializeComponent();
-            
+        {            
+            InitializeComponent();              
         }
 
-        private void PrepareControls()
+        public void SetFilter(InventoryExFilter filter, int index)
         {
-            SwitchEnable.IsToggled = App.IsExtFilterEnabled;
-            LblEnabled.Text = SwitchEnable.IsToggled.ToString();
-
-            FilterAction action = (FilterAction)App.InvExtFilter.action;
-            LblAction.Text = action.ToString();
-
-            Bank bank =  (Bank)App.InvExtFilter.bank;
-            LblBank.Text = bank.ToString();
-            TargetSession target = (TargetSession)App.InvExtFilter.target;
-            LblTarget.Text = target.ToString();
-            LblAddr.Text = App.InvExtFilter.address.ToString();
-
-
-            if(App.InvExtFilter.maskData != null)
-                LblMask.Text = NurApi.BinToHexString(App.InvExtFilter.maskData);
-            LblLength.Text = App.InvExtFilter.maskBitLength.ToString();           
+            mFilter = filter;
+            mIndex = index;
         }
 
-        void OnFilterEnableSwitch(object sender, EventArgs e)
+        private void PrepareListItems()
         {
-            LblEnabled.Text = SwitchEnable.IsToggled.ToString();
-            App.IsExtFilterEnabled = SwitchEnable.IsToggled;
+            string txt;
+
+            itemList.Clear();
+
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                ListItemStyle style = new ListItemStyle("ic_settings_black", 20, Color.White, Color.Black, Color.Blue);
+
+                ListItem enabledItem = new ListItem();
+                enabledItem.Selected = (mIndex == 0) ? App.IsExtFilter1Enabled : App.IsExtFilter2Enabled;
+                enabledItem.ItemHeaderText = "Enable Filter " + (mIndex + 1).ToString();
+                FilterEnable(enabledItem);
+                itemList.Add(enabledItem);
+
+                FilterAction action = (FilterAction)mFilter.action;
+                itemList.Add(new ListItem(style, "Action", action.ToString()));
+
+                Bank bank = (Bank)mFilter.bank;
+                itemList.Add(new ListItem(style, "Bank", bank.ToString()));
+
+                TargetSession target = (TargetSession)mFilter.target;
+                itemList.Add(new ListItem(style, "Target session", target.ToString()));
+                itemList.Add(new ListItem(style, "Address", mFilter.address.ToString()));
+
+                if (mFilter.maskData != null)
+                {
+                    txt = NurApi.BinToHexString(mFilter.maskData);
+                }
+                else txt = "";
+
+                itemList.Add(new ListItem(style, "Mask (HEX string)", txt));
+                itemList.Add(new ListItem(style, "Mask length (bits)", mFilter.maskBitLength.ToString()));
+            });
+        }               
+
+        void FilterEnable(ListItem enabledItem)
+        {
+            if (enabledItem.Selected)
+            {
+                enabledItem.SetImage("ic_enabled.png", 20);
+                enabledItem.ItemValueText = "Enabled";
+                enabledItem.ItemValueColor = Color.Green;
+            }
+            else
+            {
+                enabledItem.SetImage("ic_disabled.png", 20);
+                enabledItem.ItemValueText = "Disabled";
+                enabledItem.ItemValueColor = Color.Red;
+            }
+
+            if(mIndex==0) App.IsExtFilter1Enabled = enabledItem.Selected;
+            else App.IsExtFilter2Enabled = enabledItem.Selected;           
         }
 
-        async void OnButtonActionClicked(object sender, EventArgs e)
+        async void ActionSelection(ListItem item)
         {
             /*
             string[] arr = new string[8];
@@ -69,8 +109,8 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             {
                 Array actionValues = Enum.GetValues(typeof(FilterAction));
                 FilterAction b = (FilterAction)actionValues.GetValue(levelIndex);
-                App.InvExtFilter.action = (byte)b;
-                LblAction.Text = b.ToString();
+                mFilter.action = (byte)b;
+                item.ItemValueText = b.ToString();
             }
             catch (Exception ex)
             {
@@ -78,7 +118,7 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             }
         }
 
-        async void OnButtonBankClicked(object sender, EventArgs e)
+        async void BankSelection(ListItem item)
         {
             string[] arr = Enum.GetNames(typeof(Bank));
             IndexDictionary dict = new IndexDictionary(arr);
@@ -90,8 +130,8 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             {
                 Array bankValues = Enum.GetValues(typeof(Bank));
                 Bank b = (Bank)bankValues.GetValue(levelIndex);
-                App.InvExtFilter.bank = (byte)b;
-                LblBank.Text = b.ToString();
+                mFilter.bank = (byte)b;
+                item.ItemValueText = b.ToString();
             }
             catch (Exception ex)
             {
@@ -99,7 +139,7 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             }
         }
 
-        async void OnButtonTargetClicked(object sender, EventArgs e)
+        async void TargetSelection(ListItem item)
         {
             string[] arr = Enum.GetNames(typeof(TargetSession));
             IndexDictionary dict = new IndexDictionary(arr);
@@ -111,8 +151,8 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             {
                 Array targetValues = Enum.GetValues(typeof(TargetSession));
                 TargetSession b = (TargetSession)targetValues.GetValue(levelIndex);
-                App.InvExtFilter.target = (byte)b;
-                LblTarget.Text = b.ToString();
+                mFilter.target = (byte)b;
+                item.ItemValueText = b.ToString();                
             }
             catch (Exception ex)
             {
@@ -120,17 +160,17 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             }
         }
 
-        async void OnButtonAddrClicked(object sender, EventArgs e)
+        async void AddressSelection(ListItem item)
         {
-            string result = await DisplayPromptAsync("Set address", "(bits)", "OK", "Cancel", App.InvExtFilter.address.ToString(), maxLength: 3, keyboard: Keyboard.Numeric);
+            string result = await DisplayPromptAsync("Set address", "(bits)", "OK", "Cancel", mFilter.address.ToString(), maxLength: 3, keyboard: Keyboard.Numeric, mFilter.address.ToString());
 
             if (result == "Cancel") return;
             if (string.IsNullOrEmpty(result)) return;
 
             try
             {
-                App.InvExtFilter.address = Convert.ToUInt32(result);
-                LblAddr.Text = App.InvExtFilter.address.ToString();
+                mFilter.address = Convert.ToUInt32(result);
+                item.ItemValueText = mFilter.address.ToString();
             }
             catch (Exception ex)
             {
@@ -138,22 +178,22 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             }
         }
 
-        async void OnButtonMaskClicked(object sender, EventArgs e)
+        async void MaskDataSelection(ListItem item)
         {
             string placeHolder = "";
-            if(App.InvExtFilter.maskData != null)
+            if(mFilter.maskData != null)
             {
-                placeHolder = NurApi.BinToHexString(App.InvExtFilter.maskData);
+                placeHolder = NurApi.BinToHexString(mFilter.maskData);
             }
-            string result = await DisplayPromptAsync("Set Mask", "(hex)", "OK", "Cancel", placeHolder, maxLength: 20, keyboard: Keyboard.Text);
+            string result = await DisplayPromptAsync("Set Mask", "(hex)", "OK", "Cancel", placeHolder, maxLength: 20, keyboard: Keyboard.Text, placeHolder);
 
             if (result == "Cancel") return;
             if (string.IsNullOrEmpty(result)) return;
 
             try
             {
-                App.InvExtFilter.maskData = NurApi.HexStringToBin(result);                               
-                LblMask.Text = result;
+                mFilter.maskData = NurApi.HexStringToBin(result);
+                item.ItemValueText = result;
             }
             catch (Exception ex)
             {
@@ -161,17 +201,17 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             }
         }
 
-        async void OnButtonLengthClicked(object sender, EventArgs e)
+        async void MaskLengthSelection(ListItem item)
         {
-            string result = await DisplayPromptAsync("Set Length", "(bits)", "OK", "Cancel", App.InvExtFilter.maskBitLength.ToString(), maxLength: 3, keyboard: Keyboard.Numeric);
+            string result = await DisplayPromptAsync("Set Length", "(bits)", "OK", "Cancel", mFilter.maskBitLength.ToString(), maxLength: 3, keyboard: Keyboard.Numeric, mFilter.maskBitLength.ToString());
 
             if (result == "Cancel") return;
             if (string.IsNullOrEmpty(result)) return;
 
             try
             {
-                App.InvExtFilter.maskBitLength = Convert.ToInt32(result);
-                LblLength.Text = App.InvExtFilter.maskBitLength.ToString();
+                mFilter.maskBitLength = Convert.ToInt32(result);
+                item.ItemValueText = mFilter.maskBitLength.ToString();
             }
             catch (Exception ex)
             {
@@ -181,17 +221,62 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
 
         protected override void OnAppearing()
         {
-            base.OnAppearing();
+            base.OnAppearing();                    
 
-            //Need in order to show status messages bottom of the screen
-            App.BindStatusMessage(MyStatusBar);
+            //Fill items to list
+            PrepareListItems();
 
-            PrepareControls();            
+            //This event needed when user click item
+            MySettingsList.OnItemSelected += MySettingsList_OnItemSelected;
+
+            //Assing item list to ListTemplate
+            MySettingsList.SetItemsSource(itemList);
+        }
+
+        private void MySettingsList_OnItemSelected(object sender, EventArgs e)
+        {
+            //User tapped item. Selection not shown. If wanted to show selection, it must be done manually like changing Bkcolor of item.
+            ItemTappedEventArgs arg = (ItemTappedEventArgs)e;
+            ListItem item = (ListItem)arg.Item;
+
+            switch (arg.ItemIndex)
+            {
+                case 0:
+                    FilterEnable(item);
+                    break;
+                case 1:
+                    ActionSelection(item);
+                    break;
+                case 2:
+                    BankSelection(item);
+                    break;
+                case 3:
+                    TargetSelection(item);
+                    break;
+                case 4:
+                    AddressSelection(item);
+                    break;
+                case 5:
+                    MaskDataSelection(item);
+                    break;
+                case 6:
+                    MaskLengthSelection(item);
+                    break;
+            }
         }
 
         protected override void OnDisappearing()
         {
+            //Save settings to device memory so we can use same settings when app started next time
+            string output = JsonConvert.SerializeObject(mFilter);
+            if (mIndex == 0)
+                Preferences.Set("InvExtFilter1", output);
+            else Preferences.Set("InvExtFilter2", output);
+
+            MySettingsList.OnItemSelected -= MySettingsList_OnItemSelected;
             base.OnDisappearing();
-        }
+
+        }   
+        
     }
 }

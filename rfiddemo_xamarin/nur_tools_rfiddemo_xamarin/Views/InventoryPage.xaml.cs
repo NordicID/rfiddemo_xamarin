@@ -5,11 +5,13 @@ using System.Linq;
 using NurApiDotNet;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xamarin.Essentials;
 using nur_tools_rfiddemo_xamarin.Models;
 using System.Collections.ObjectModel;
 using static NurApiDotNet.NurApi;
 using Rg.Plugins.Popup.Services;
-using NordicID.NurApi.Support;
+using NordicID.NurApi.Support.TDT;
+using NurApiDotNet.Support;
 using nur_tools_rfiddemo_xamarin.Views.SettingsPages;
 
 namespace nur_tools_rfiddemo_xamarin.Views
@@ -18,7 +20,8 @@ namespace nur_tools_rfiddemo_xamarin.Views
     public partial class InventoryPage : ContentPage
     {        
         ObservableCollection<TagDetails> tagDetails = new ObservableCollection<TagDetails>();
-        
+        Stats stats = new Stats(); //For calculating statistic information about reading speed.
+
         public InventoryPage()
         {
             InitializeComponent();           
@@ -26,7 +29,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
         private async void WriteEPC(Tag curTag)
         {            
-            string newEPC = await DisplayPromptAsync("New EPC", " Type HEX strings using WORD boundary", "OK", "Cancel", curTag.GetEpcString(), maxLength: 40,null);
+            string newEPC = await DisplayPromptAsync("New EPC", " Type HEX strings using WORD boundary", "OK", "Cancel", curTag.GetEpcString(), maxLength: 40,null, curTag.GetEpcString());
             if (newEPC == null) return;
 
             if (newEPC.Length > 0)
@@ -46,7 +49,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
         private async void KillTag(Tag curTag)
         {            
-            string killPWD = await DisplayPromptAsync("Kill tag", "Type Kill password", "OK", "Cancel", null, maxLength: 20, Keyboard.Numeric);
+            string killPWD = await DisplayPromptAsync("Kill tag", "Type Kill password", "OK", "Cancel", null, maxLength: 20, Keyboard.Numeric,"");
             if (killPWD == null) return;
 
             if (killPWD.Length > 0)
@@ -68,7 +71,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 
         private async void SetAccessPassword(Tag curTag)
         {            
-            string accPWD = await DisplayPromptAsync("Set access password", "Type Access password", "OK", "Cancel", null, maxLength: 20, Keyboard.Numeric);
+            string accPWD = await DisplayPromptAsync("Set access password", "Type Access password", "OK", "Cancel", null, maxLength: 20, Keyboard.Numeric,"");
             if (accPWD == null) return;
 
             if (accPWD.Length > 0)
@@ -93,7 +96,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
         private async void SetKillPassword(Tag curTag)
         {            
-            string killPWD = await DisplayPromptAsync("Set kill password", "Type kill password", "OK", "Cancel", null, maxLength: 20, Keyboard.Numeric);
+            string killPWD = await DisplayPromptAsync("Set kill password", "Type kill password", "OK", "Cancel", null, maxLength: 20, Keyboard.Numeric,"");
             if (killPWD == null) return;
 
             if (killPWD.Length > 0)
@@ -116,7 +119,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
         async void OnItemTapped(object sender, ItemTappedEventArgs args)
         {            
-            Tag item = App.Nur.GetTagStorage().Get(args.ItemIndex);
+            Tag item = App.Nur.GetTagStorage()[args.ItemIndex];
 
             if (item == null)
                 return;            
@@ -151,48 +154,76 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
         }
                            
-        private void InventoryEnable(bool enable)
+        private async void InventoryEnable(bool enable)
         {
-            if (enable==false)
+            if (App.Nur.IsConnected() == false)
             {
-                //Stop it.                               
-                App.Nur.StopInventoryStream();                
-                ButInvStart.Text = "START";
-                ButInvStart.BackgroundColor = Color.LightGreen;               
+                await DisplayAlert("Operation failed!", "Transport not connected", "OK");
+                return;
             }
-            else
+
+            Device.BeginInvokeOnMainThread(async () =>
             {
-                //Start      
-                if (App.IsInventoryExEnabled)
+                if (enable == false)
                 {
-                    //Do InventoryEx streaming
-                    //This demo using only one filter but there could be more than one.
-                    //..and only if its enabled
-                    InventoryExFilter[] filterArray = new InventoryExFilter[1];
-                    filterArray[0] = App.InvExtFilter;
-
-                    if (App.IsExtFilterEnabled)
-                        App.Nur.StartInventoryEx(App.InvExtParams, filterArray); //Yes, filter enabled
-                    else App.Nur.StartInventoryEx(App.InvExtParams, null); //No, pass null to filter param.
-
-                    //Reading result goes in to the Nur_InventoryExEvent
+                    //Stop it.             
+                    if (App.IsInventoryExEnabled)
+                        App.Nur.StopInventoryEx();
+                    else
+                        App.Nur.StopInventoryStream();
+                    
+                    ButInvStart.Text = "START";
+                    ButInvStart.BackgroundColor = Color.LightGreen;
+                    stats.Stop();
+                    DeviceDisplay.KeepScreenOn = false;
                 }
                 else
                 {
-                    //Make simple inventory.
-                    App.Nur.StartInventoryStream();
+                    //Start      
+                    if (App.IsInventoryExEnabled)
+                    {
+                        //Do InventoryEx streaming
+                        //This demo using only one filter but there could be more than one.
+                        //..and only if its enabled
+                        int filterCount = 0;
+                        if (App.IsExtFilter1Enabled) filterCount++;
+                        if (App.IsExtFilter2Enabled) filterCount++;
+
+                        if (filterCount > 0)
+                        {
+                            int fltIndex = 0;
+                            InventoryExFilter[] filterArray = new InventoryExFilter[filterCount];
+                            if (App.IsExtFilter1Enabled)
+                                filterArray[fltIndex++] = App.InvExtFilter1;
+                            if (App.IsExtFilter2Enabled)
+                                filterArray[fltIndex++] = App.InvExtFilter2;
+
+                            //Go inventroy with filters
+                            App.Nur.StartInventoryEx(App.InvExtParams, filterArray);
+                        }
+                        else App.Nur.StartInventoryEx(App.InvExtParams, null); //No filters, pass null to filter param.
+
+                        //Reading result goes in to the Nur_InventoryExEvent
+                    }
+                    else
+                    {
+                        //Make simple inventory.
+                        App.Nur.StartInventoryStream();
+                    }
+
+                    ButInvStart.Text = "STOP";
+                    ButInvStart.BackgroundColor = Color.IndianRed;
+                    stats.Start();
+                    DeviceDisplay.KeepScreenOn = true;
                 }
-                                
-                ButInvStart.Text = "STOP";
-                ButInvStart.BackgroundColor = Color.IndianRed;              
-            }
+            });
         }
 
         async void OnStartInventoryClicked(object sender, EventArgs e)
         {
             try
-            {
-                if (App.Nur.IsInventoryStreamRunning())
+            {               
+                if (App.Nur.IsInventoryExRunning() || App.Nur.IsInventoryStreamRunning())
                 {
                     InventoryEnable(false); //Stop it
                 }
@@ -218,6 +249,8 @@ namespace nur_tools_rfiddemo_xamarin.Views
             {
                 App.Nur.ClearTagsEx(); //Clear tags from NurApi internal and from module.
                 tagDetails.Clear();
+                stats.Clear();
+                ShowStats(0);
             }
             catch(Exception ex)
             {
@@ -229,13 +262,13 @@ namespace nur_tools_rfiddemo_xamarin.Views
         {
             string key;
 
-            if (string.IsNullOrEmpty(tag.EpcString))
-                key = ":" + tag.DataString;
+            if (string.IsNullOrEmpty(tag.GetEpcString()))
+                key = ":" + tag.GetDataString();
             else
             {
-                key = tag.EpcString;
-                if (string.IsNullOrEmpty(tag.DataString) == false)
-                    key += ":" + tag.DataString;
+                key = tag.GetEpcString();
+                if (string.IsNullOrEmpty(tag.GetDataString()) == false)
+                    key += ":" + tag.GetDataString();
             }
 
             return key;
@@ -246,7 +279,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
             var item = tagDetails.FirstOrDefault(i => i.EPCKey == BuildEpcAndDataKeyString(tag));
             if (item != null)
             {                
-               item.Antenna = App.AntennaList[(int)tag.antennaId].name;              
+               item.Antenna = App.AntennaList[(int)tag.antennaId].Name;              
                item.RSSI = tag.rssi.ToString();
                item.RSSIScaled = (double)(tag.scaledRssi)/100.0;                
             }
@@ -260,14 +293,15 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 detail.EPCKey = BuildEpcAndDataKeyString(tag);
                 detail.EPC = detail.EPCKey; //may change..
                 detail.EPCColor = Color.DarkGreen;
-                detail.Antenna = App.AntennaList[(int)tag.antennaId].name;
+                detail.Antenna = App.AntennaList[(int)tag.antennaId].Name;
                 detail.RSSI = tag.rssi.ToString();
                 detail.RSSIScaled = (double)(tag.scaledRssi) / 100.0;
                 if (App.IsShowGS1CodedTags)
                 {
                     try
                     {
-                        TDT.EPCTagEngine eng = new TDT.EPCTagEngine(tag.EpcString);                        
+                        EPCTagEngine eng = new EPCTagEngine(tag.epc, tag.epc.Length);
+
                         detail.EPC = eng.BuildPureIdentityURI();
                         detail.EPCColor = Color.Blue;
                     }
@@ -278,7 +312,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
                     }
                 }
                 else                               
-                    detail.DATA = tag.DataString;             
+                    detail.DATA = tag.GetDataString();             
                 
             }
             catch(Exception e)
@@ -304,7 +338,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
             {
                 for (int x = 0; x < st.Count; x++)
                 {
-                    tagDetails.Add(BuildObservable(st.Get(x)));
+                    tagDetails.Add(BuildObservable(st[x]));
                 }
             }
 
@@ -314,36 +348,78 @@ namespace nur_tools_rfiddemo_xamarin.Views
             App.Nur.InventoryExEvent += Nur_InventoryExEvent;                        
         }
 
+        static int statTagCount=0;
+        static int statTagPerSec=0;
+        static int statMaxTagPerSec=0;
+        static int statRounds=0;
+        private void ShowStats(int tagCount)
+        {         
+            if(statTagCount != tagCount)
+            {
+                LabelUniqueTags.Text = tagCount.ToString();
+                LabelUniqueTagsInTime.Text  = "(in " + stats.GetElapsedSecs().ToString("#.#") + " sec)";
+                statTagCount = tagCount;
+            }
+
+            if (statTagPerSec != stats.GetTagsPerSec())
+            {
+                LabelTagsPerSec.Text = stats.GetTagsPerSec().ToString();
+                statTagPerSec = stats.GetTagsPerSec();
+            }
+
+            if (statMaxTagPerSec != stats.GetMaxTagsPerSec())
+            {
+                LabelMaxTagsPerSec.Text = stats.GetMaxTagsPerSec().ToString();
+                statMaxTagPerSec = stats.GetMaxTagsPerSec();
+            }
+
+            if (statRounds != stats.GetInventoryRounds())
+            {
+                LabelRounds.Text = stats.GetInventoryRounds().ToString();
+                statRounds = stats.GetInventoryRounds();
+            }                                   
+        }
+
         private void HandleInventoryStreamEvent(InventoryStreamEventArgs e)
         {
             //Inventoried tags are now added or updated in to the internal TagStore
-            TagStorage storage = App.Nur.GetTagStorage();
+            TagStorage storage = App.Nur.GetTagStorage();                       
 
             try
             {
-                //Get list of tags added and tags just updated.
-                List<Tag> added = storage.GetAddedTags();
-                List<Tag> updated = storage.GetUpdatedTags();
-
                 // Update tag information in to the UI                          
                 Device.BeginInvokeOnMainThread(async () =>
                 {
                     lock (storage)
                     {
-                        for (int n = 0; n < updated.Count; n++)
+                        //Get list of tags added and tags just updated.
+                        Dictionary<byte[],Tag> added = storage.GetAddedTags();
+                        Dictionary<byte[],Tag> updated = storage.GetUpdatedTags();
+
+                        //..for statistic purpose
+                        stats.UpdateStats(e.data.roundsDone,added.Count+updated.Count);
+                        ShowStats(storage.Count);
+
+                        foreach (KeyValuePair<byte[], Tag> utag in updated)
                         {
-                            UpdateObservable(updated[n]);
+                            UpdateObservable(utag.Value);
                         }
 
                         // Add inventoried tags to our unique tag storage
-                        for (int n = 0; n < added.Count; n++)
+                        foreach (KeyValuePair<byte[], Tag> atag in added)
                         {
-                            TagDetails td = BuildObservable(added[n]);
-                            if(td != null)
+                            TagDetails td = BuildObservable(atag.Value);
+                            if (td != null)
                                 tagDetails.Add(td);
-                        }
+                        }      
+                        
+                        added.Clear();
+                        updated.Clear();
                     }
                 });
+
+                //Make sure lists are cleared so we can receive fresh added/updated information next time                   
+                
             }
             catch (Exception ex)
             {
@@ -354,9 +430,10 @@ namespace nur_tools_rfiddemo_xamarin.Views
             {
                 try
                 {
-                    if (App.IsExtFilterEnabled)
+                    if (App.IsInventoryExEnabled)
                         App.Nur.InventoryEx(); //This just rerun InventoryExStream
-                    else App.Nur.StartInventoryStream(); //Start simple inventory again
+                    else
+                        App.Nur.StartInventoryStream(); //Start simple inventory again
 
                     Debug.WriteLine("RESTARTED");
                 }

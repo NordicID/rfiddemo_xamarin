@@ -18,7 +18,8 @@ namespace nur_tools_rfiddemo_xamarin.ViewModels
 
         public MainPageViewModel()
         {
-            Title = "Nordic ID RFID Demo";
+            Title = "Nordic ID RFID Demo";          
+            
             Items = new ObservableCollection<Item>();
             LoadItemsCommand = new Command(() => ExecuteLoadItemsCommand());                                    
         }
@@ -33,7 +34,7 @@ namespace nur_tools_rfiddemo_xamarin.ViewModels
             try
             {
                 Items.Clear();
-                Items.Add(new Item { itemMain = MainPageItem.Connection, Text = "Connection", Description = "Reader connection", ImageName= "connection2.png" });               
+                Items.Add(new Item { itemMain = MainPageItem.Connection, Text = "Connection", Description = "Reader connection", ImageName = "connection.png" });              
                 Items.Add(new Item { itemMain = MainPageItem.Settings, Text = "Settings", Description = "Reader settings", ImageName = "ic_settings.png" });
                 Items.Add(new Item { itemMain = MainPageItem.Inventory, Text = "Inventory", Description = "Read RFID tags", ImageName = "ic_inventory.png" });
                 Items.Add(new Item { itemMain = MainPageItem.SensorTag, Text = "SensorTag", Description = "Read sensor tag (Temperature, Moisture)", ImageName = "ic_inventory.png" });

@@ -8,47 +8,11 @@
              x:Class="nur_tools_rfiddemo_xamarin.Views.SettingsPages.SettingsInventroyRead">
     <NavigationPage.TitleView>
         <StackLayout Orientation="Horizontal">
-
             <Image Source="ic_settings.png" WidthRequest="55"/>
             <Label Text="Inventory Read" VerticalOptions="Center" TextColor="Black" FontSize="Title" />
         </StackLayout>
     </NavigationPage.TitleView>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Click item to change!"
-                VerticalOptions="Start" 
-                HorizontalOptions="Start" />
-
-            <Grid x:Name="controlGrid" RowSpacing="0" ColumnSpacing="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="45"/>
-                    <RowDefinition Height="45" />
-                    <RowDefinition Height="45" />
-                    <RowDefinition Height="45" />
-                    
-
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="*" />
-
-                </Grid.ColumnDefinitions>
-
-                <Button x:Name="ButtonBank" Text="Bank" Grid.Row="0" Grid.Column="0" Clicked="OnButtonBankClicked"/>
-                <Button x:Name="ButtonType" Text="Type" Grid.Row="1" Grid.Column="0" Clicked="OnButtonTypeClicked" />
-                <Button x:Name="ButtonAddr" Text="Start address" Grid.Row="2" Grid.Column="0" Clicked="OnButtonAddrClicked" />
-                <Button x:Name="ButtonWords" Text="Word count" Grid.Row="3" Grid.Column="0"  Clicked="OnButtonwordsClicked"/>
-                
-                <Label Grid.Row="0" Grid.Column="1" x:Name="LblBank" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start" FontAttributes="None"></Label>
-                <Label Grid.Row="1" Grid.Column="1" x:Name="LblType" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Start" FontAttributes="None"></Label>
-                <Label Grid.Row="2" Grid.Column="1" x:Name="LblStartAddr" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Start" FontAttributes="None"></Label>
-                <Label Grid.Row="3" Grid.Column="1" x:Name="LblWordCount" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Start" FontAttributes="None"></Label>
-                
-            </Grid>
-            <Button x:Name="ButtonSave" Text="Save" Clicked="OnButtonSaveIRClicked"/>
-            
-                <templates:StatusBar x:Name="MyStatusBar" />
-            
-        </StackLayout>
+        <templates:ListTemplate x:Name="MySettingsList" />
     </ContentPage.Content>
 </ContentPage>

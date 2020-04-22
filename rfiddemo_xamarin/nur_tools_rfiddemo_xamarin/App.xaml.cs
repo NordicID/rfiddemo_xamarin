@@ -6,13 +6,16 @@ using nur_tools_rfiddemo_xamarin.Templates;
 using NurApiDotNet;
 using System.Collections.Generic;
 using static NurApiDotNet.NurApi;
+using System.Diagnostics;
+using Xamarin.Essentials;
+using Newtonsoft.Json;
+using NurApiDotNet.Android;
 
 namespace nur_tools_rfiddemo_xamarin
 {
     public partial class App : Application
     {        
-        static NurApi mNurApi;
-        static NurDeviceDiscovery mDeviceDiscovery;
+        //static NurApi mNurApi;
         static StatusBar curStatus;
         static int showMsgTime;
 
@@ -20,31 +23,47 @@ namespace nur_tools_rfiddemo_xamarin
         {
             InitializeComponent();
                        
-            mNurApi = new NurApi();
-            mDeviceDiscovery = new NurDeviceDiscovery();           
-            mNurApi.OnTransportStatusChanged += MNurApi_OnTransportStatusChanged;           
+            Nur = new NurApi();           
+                       
+            Nur.ConnectionStatusEvent += MNurApi_TransportStatusEvent;
+
+            //mNurApi.SetLogLevel(NurApi.LOG_ALL);
+            //mNurApi.SetLogToStdout(true);
+            Nur.LogEvent += MNurApi_LogEvent;                      
 
             MainPage = new MainPage();
         }
-               
-        private void MNurApi_OnTransportStatusChanged(object sender, NurTransportStatus e)
+
+        private void MNurApi_LogEvent(object sender, LogEventArgs e)
+        {
+            Debug.WriteLine(e.message);
+        }
+
+        private void MNurApi_TransportStatusEvent(object sender, NurTransportStatus e)
         {
             if (e == NurTransportStatus.Connected)
-            {                
+            {
                 //Get fresh AntennaList from reader
-                AntennaList = mNurApi.GetAntennaList();
+                try
+                {
+                    AntennaList = Nur.GetAntennaList();
+                } 
+                catch (Exception)
+                {
+                    return;
+                }
             }
 
             ShowShortStatusMessage("", 0, Color.Black, Color.Black);
         }
-
+               
         public static void UpdateTransportStatusBarText(StatusBar sBar)
         {
             if (sBar == null) return;
 
             sBar.SetBkColor(Color.Black);
             
-            if (App.Nur.TransportStatus == NurTransportStatus.Connected)
+            if (App.Nur.ConnectionStatus == NurTransportStatus.Connected)
             {
                 string name = Nur.ConnectedDeviceUri?.GetQueryParam("name");
                 if (string.IsNullOrEmpty(name))
@@ -54,7 +73,7 @@ namespace nur_tools_rfiddemo_xamarin
                 sBar.SetTextColor(Color.LightGreen);
 
             }
-            else if (App.Nur.TransportStatus == NurTransportStatus.Connecting)
+            else if (App.Nur.ConnectionStatus == NurTransportStatus.Connecting)
             {
                 string name = Nur.ConnectedDeviceUri?.GetQueryParam("name");
                 if (string.IsNullOrEmpty(name))
@@ -63,40 +82,52 @@ namespace nur_tools_rfiddemo_xamarin
                 sBar.SetText("CONNECTING TO: " +  name);
                 sBar.SetTextColor(Color.Yellow);
             }
-            else if (App.Nur.TransportStatus == NurTransportStatus.Disconnected)
+            else if (App.Nur.ConnectionStatus == NurTransportStatus.Disconnected)
             {
                 sBar.SetText("DISCONNECTED");
                 sBar.SetTextColor(Color.Red);
             }
         }
 
-        public static List<Antenna> AntennaList { get; private set; }
+        public static List<AntennaMapping> AntennaList { get; private set; }
 
-        public static NurApi Nur  
-        {
-            get { return mNurApi; }          
-        }
+        public static NurApi Nur { get; set; }
 
         /// <summary>
         /// Holding InventoryEx params<br/>
         /// These cannot read from module
         /// </summary>
-        public static InventoryExParams InvExtParams { get; } = new InventoryExParams();
+        public static InventoryExParams InvExtParams { get; set; } = new InventoryExParams();
 
         /// <summary>
         /// Holding InventoryEx filter
         /// </summary>
-        public static InventoryExFilter InvExtFilter { get; } = new InventoryExFilter();
+        public static InventoryExFilter InvExtFilter1 { get; set; } = new InventoryExFilter();
 
         /// <summary>
         /// True if InventoryEx filter is enabled
         /// </summary>
-        public static bool IsExtFilterEnabled { get; set; } = new bool();
+        public static bool IsExtFilter1Enabled { get; set; } = new bool();
+
+        /// <summary>
+        /// Holding InventoryEx filter
+        /// </summary>
+        public static InventoryExFilter InvExtFilter2 { get; set; } = new InventoryExFilter();
+
+        /// <summary>
+        /// True if InventoryEx filter is enabled
+        /// </summary>
+        public static bool IsExtFilter2Enabled { get; set; } = new bool();
 
         /// <summary>
         /// True if InventoryEx is enabled
         /// </summary>
         public static bool IsInventoryExEnabled { get; set; } = new bool();
+
+        /// <summary>
+        /// Holding InventoryRead params. These will be put in module when activated in InvOptions
+        /// </summary>
+        public static IrInformation InvReadParams { get; set; } = new IrInformation();
 
         /// <summary>
         /// True if Inventroy Read settings is taking accouct when doing inventory
@@ -112,12 +143,6 @@ namespace nur_tools_rfiddemo_xamarin
         /// True if inventory results shows only GS1 coded tags in inventory result.
         /// </summary>
         public static bool IsShowOnlyGS1CodedTags { get; set; } = new bool();
-
-        public static NurDeviceDiscovery NurDeviceSearch
-        {
-            get { return mDeviceDiscovery; }
-        }
-                
         public static void BindStatusMessage(StatusBar o)
         {
             curStatus = o;
@@ -170,6 +195,50 @@ namespace nur_tools_rfiddemo_xamarin
                 
                 return true; // True = Repeat again, False = Stop the timer
             });
+
+            /*
+             Reloading Preferences from Android/iOS/UWP device
+            - InventoryExtended parameters and filter
+            - InventoryRead parameters
+            
+            */
+
+            try
+            {
+                string json = Preferences.Get("InvExtParams", "");
+                if (!string.IsNullOrEmpty(json))
+                {
+                   InvExtParams = JsonConvert.DeserializeObject<InventoryExParams>(json);
+                }
+
+                json = Preferences.Get("InvExtFilter1", "");
+                if (!string.IsNullOrEmpty(json))
+                {
+                    InvExtFilter1 = JsonConvert.DeserializeObject<InventoryExFilter>(json);
+                }
+
+                json = Preferences.Get("InvExtFilter2", "");
+                if (!string.IsNullOrEmpty(json))
+                {
+                    InvExtFilter2 = JsonConvert.DeserializeObject<InventoryExFilter>(json);
+                }
+
+                IsExtFilter1Enabled = Preferences.Get("InvExtFilter1Enabled", false);
+                IsExtFilter2Enabled = Preferences.Get("InvExtFilter2Enabled", false);
+
+                json = Preferences.Get("InvReadParams", "");
+                if (!string.IsNullOrEmpty(json))
+                {
+                    InvReadParams = JsonConvert.DeserializeObject<IrInformation>(json);
+                }
+
+
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine("Error loading InvExt params:" + e.Message);
+            }
+            
         }
 
         protected override void OnSleep()
@@ -179,6 +248,27 @@ namespace nur_tools_rfiddemo_xamarin
         protected override void OnResume()
         {
         }
-        
+
+        public static int ValidateAndConvertToInt(string result, int min, int max)
+        {
+            int val;
+
+            if (string.IsNullOrEmpty(result))
+                throw new Exception("Cancel or no value");
+
+            try
+            {
+                val = Convert.ToInt32(result);
+                if (val < min || val > max)
+                    throw new Exception("Value not in range. Must be " + min.ToString() + "-" + max.ToString());
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return val;
+        }
     }
 }

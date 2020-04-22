@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="nur_tools_rfiddemo_xamarin.Views.InfoPage">
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal">
+            <Image Source="ic_info_blue.png" WidthRequest="55"/>
+            <Label Text="Info" VerticalOptions="Center" TextColor="Black" FontSize="Title" />
+            <Button Text="&lt;" HorizontalOptions="EndAndExpand" HeightRequest="40" WidthRequest="50" Clicked="onBackClicked"></Button>
+        </StackLayout>
+    </NavigationPage.TitleView>
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <Label x:Name="LoadingLabel" Text="Loading..." HorizontalOptions="Center"></Label>
+        <WebView x:Name="Browser" HeightRequest="1000" WidthRequest="1000" Navigating="onNavigating" Navigated="onNavigated"></WebView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

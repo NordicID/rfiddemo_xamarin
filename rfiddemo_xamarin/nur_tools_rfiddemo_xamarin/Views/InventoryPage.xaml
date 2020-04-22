@@ -14,6 +14,23 @@
     </NavigationPage.TitleView>
     <ContentPage.Content>
         <StackLayout>
+            <StackLayout Orientation="Vertical" BackgroundColor="Black">
+                <StackLayout Orientation="Horizontal" BackgroundColor="Black">
+                    <Label Text="Unique Tags" FontSize="Small" TextColor="White" WidthRequest="150"></Label>
+                    <Label Text="Tags/sec" FontSize="Small" TextColor="White" WidthRequest="70"></Label>                    
+                    <Label Text="Max" FontSize="Small" TextColor="White" WidthRequest="40"></Label>
+                    <Label Text="Rounds" FontSize="Small" TextColor="White" WidthRequest="50"></Label>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal" BackgroundColor="Black" HeightRequest="40">
+                    <Label x:Name="LabelUniqueTags" FontSize="Medium" Margin="3,-3" Text="0000" WidthRequest="50" TextColor="LightGreen"></Label>
+                    <Label x:Name="LabelUniqueTagsInTime" FontSize="Small" Text="(in 0 sec)" WidthRequest="110" TextColor="White"></Label>
+                    <Label x:Name="LabelTagsPerSec" Text="0" WidthRequest="55" TextColor="LightGreen"></Label>
+                    <Label x:Name="LabelMaxTagsPerSec" Text="0" WidthRequest="45" TextColor="LightGreen"></Label>
+                    <Label x:Name="LabelRounds" Text="0" WidthRequest="50" TextColor="LightGreen"></Label>
+                </StackLayout>
+            </StackLayout>
+
             <ListView x:Name="TagsView" RowHeight="60" Margin="10,0"
             ItemTapped="OnItemTapped"                     
             ItemsSource="{Binding TagDetails}">
@@ -58,7 +75,7 @@
             <StackLayout Orientation="Horizontal" Padding="5">
                 <Button Text="START" x:Name="ButInvStart" Clicked="OnStartInventoryClicked"></Button>
                 <Button Text="CLEAR" x:Name="ButInvClear" Clicked="OnClearInventoryClicked"></Button>
-                <Button Text="Options.." x:Name="ButInvOptions" HorizontalOptions="End" Clicked="OnInvOptionsClicked"></Button>
+                <Button Text="Options.." x:Name="ButInvOptions" WidthRequest="120" Clicked="OnInvOptionsClicked"></Button>
             </StackLayout>
 
             <templates:StatusBar x:Name="MyStatusBar" />

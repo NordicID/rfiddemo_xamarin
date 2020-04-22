@@ -24,20 +24,29 @@ namespace nur_tools_rfiddemo_xamarin.Views
             UriList = new Collection<Uri>();
 
             MyListView.ItemsSource = Items;
+
+            NurDeviceDiscovery.ErrorEvent += NurDeviceDiscovery_ErrorEvent;
         }
-        
+
+        private void NurDeviceDiscovery_ErrorEvent(object sender, string e)
+        {
+            Debug.WriteLine("NurDeviceDiscovery_ErrorEvent = " + e);
+        }
+
         protected override void OnAppearing()
         {
             App.BindStatusMessage(MyStatusBar);
 
             Debug.WriteLine(" DeviceSelectPage OnAppearing");
-            App.NurDeviceSearch.DeviceDiscoveredEvent += OnDeviceDiscovered;
+
+            Items.Clear();
+            UriList.Clear();
            
             base.OnAppearing();
             
             try
             {
-                App.NurDeviceSearch.StartDeviceDiscovery();
+                NurDeviceDiscovery.Start(OnDeviceDiscovered);
             }
             catch (Exception e)
             {
@@ -47,40 +56,64 @@ namespace nur_tools_rfiddemo_xamarin.Views
             string tcpValue = Preferences.Get("lastTCP", "default");
             if (tcpValue != "default")
             {
-                Items.Add(tcpValue);
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Items.Add(tcpValue);
+                });
+
                 UriList.Add(new Uri(tcpValue));
             }
+
+            App.ShowShortStatusMessage("Discovering devices..",100,Color.Yellow,Color.Black);
+        }
+
+        private void OnDeviceDiscovered(object sender, NurDeviceDiscoveryEventArgs args)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Uri uri = args.Uri;
+
+                Debug.WriteLine("OnDeviceDiscovered " + uri.ToString() + " Visible " + args.Visible);
+
+                string name = uri.GetQueryParam("name");
+                if (string.IsNullOrEmpty(name))
+                    name = uri.ToString();
+
+                if (args.Visible)
+                {
+                    Debug.WriteLine("OnDeviceDiscovered ADD " + name);
+
+                    Items.Add(name);
+                    UriList.Add(uri);
+                }
+                else
+                {
+                    Debug.WriteLine("OnDeviceDiscovered REMOVE " + name);
+
+                    Items.Remove(name);
+                    UriList.Remove(uri);
+                }
+            });
         }
 
         protected override void OnDisappearing()
         {
             Debug.WriteLine(" DeviceSelectPage OnDisappearing");
-            App.NurDeviceSearch.StopDeviceDiscovery();          
-            App.NurDeviceSearch.DeviceDiscoveredEvent -= OnDeviceDiscovered;
-            
+            NurDeviceDiscovery.Stop(OnDeviceDiscovered);
+            App.UpdateTransportStatusBarText(MyStatusBar);
             base.OnDisappearing();
         }
-
-        public void OnDeviceDiscovered(IDeviceDiscover instance, Uri uri, bool visible)
-        {
-            Debug.WriteLine("OnDeviceDiscovered " + uri.ToString());
-            string name = uri.GetQueryParam("name");
-            if (string.IsNullOrEmpty(name))
-                name = uri.ToString();
-
-            Items.Add(name);
-            UriList.Add(uri);                    
-        }
-
+               
         void OnDisconnectClicked(object sender, EventArgs e)
         {            
             App.Nur.Disconnect();
+            App.ShowShortStatusMessage("Discovering devices..", 100, Color.Yellow, Color.Black);
         }
 
         async void OnConnectTCPClicked(object sender, EventArgs e)
         {
             
-            string result = await DisplayPromptAsync("TCP/IP connection", "tcp://", "OK", "Cancel","192.168.1.123:4333", maxLength: 40, keyboard: Keyboard.Default);
+            string result = await DisplayPromptAsync("TCP/IP connection", "tcp://", "OK", "Cancel","192.168.1.123:4333", maxLength: 40, keyboard: Keyboard.Default,"");
 
             try
             {
@@ -101,16 +134,25 @@ namespace nur_tools_rfiddemo_xamarin.Views
         {
             if (e.Item == null)
                 return;
-            
-            //Just make sure existing connection disconnected
-            App.Nur.Disconnect();           
 
-            ConnectedDevice = UriList[e.ItemIndex];
-                       
-            App.Nur.Connect(ConnectedDevice);            
+            lock (this)
+            {
+                try
+                {
+                    //Just make sure existing connection disconnected
+                    App.Nur.Disconnect();
 
-            //Deselect Item
-            ((Xamarin.Forms.ListView)sender).SelectedItem = null;
+                    ConnectedDevice = UriList[e.ItemIndex];
+
+                    App.Nur.Connect(ConnectedDevice);
+
+                    //Deselect Item
+                    ((Xamarin.Forms.ListView)sender).SelectedItem = null;
+                } catch
+                {
+
+                }
+            }
         }
     }
 }

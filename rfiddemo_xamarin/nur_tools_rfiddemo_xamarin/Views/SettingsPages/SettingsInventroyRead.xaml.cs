@@ -1,46 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using Newtonsoft.Json;
+using nur_tools_rfiddemo_xamarin.Templates;
 using NurApiDotNet;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using static NurApiDotNet.NurApi;
 
 namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SettingsInventroyRead : ContentPage
     {
-        IrInformation mInvReadParams = new IrInformation();
-
+        ObservableCollection<ListItem> itemList = new ObservableCollection<ListItem>();
+                
         public SettingsInventroyRead()
         {
-            InitializeComponent();
-            
+            InitializeComponent();            
         }
 
-        private void PrepareControls()
+        enum ItemID
         {
-            if (App.Nur.IsConnected() && App.Nur.Capabilites.HasInventoryRead())
-            {
-                controlGrid.IsEnabled = true;
-
-                Bank bank = (Bank)mInvReadParams.bank;
-                LblBank.Text = bank.ToString();
-                
-                InventoryReadType itype = (InventoryReadType)mInvReadParams.type;
-                LblType.Text = itype.ToString();
-
-                LblStartAddr.Text = mInvReadParams.wAddress.ToString();
-                LblWordCount.Text = mInvReadParams.wLength.ToString();                                                                           
-            }
-            else controlGrid.IsEnabled = false;
+            Bank,
+            Type,
+            StartAddress,
+            WordCount            
         }
 
-        async void OnButtonBankClicked(object sender, EventArgs e)
+        private void PrepareListItems()
+        {           
+            itemList.Clear();
+
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                ListItemStyle style = new ListItemStyle("ic_settings_black", 20, Color.White, Color.Black, Color.Blue);
+
+                Bank bank = (Bank)App.InvReadParams.bank;
+                itemList.Add(new ListItem(style, "Bank", bank.ToString(), ItemID.Bank));
+
+                InventoryReadType itype = (InventoryReadType)App.InvReadParams.type;
+                itemList.Add(new ListItem(style, "Type", itype.ToString(), ItemID.Type));
+
+                itemList.Add(new ListItem(style, "Start address", App.InvReadParams.wAddress.ToString(), ItemID.StartAddress));
+                itemList.Add(new ListItem(style, "Word count", App.InvReadParams.wLength.ToString(), ItemID.WordCount));
+            });
+        }
+
+        async void HandleBankSelection(ListItem item)
         {
             string[] arr = Enum.GetNames(typeof(Bank));
             IndexDictionary dict = new IndexDictionary(arr);
@@ -52,8 +58,8 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             {                
                 Array bankValues = Enum.GetValues(typeof(Bank));
                 Bank b = (Bank)bankValues.GetValue(levelIndex);
-                mInvReadParams.bank = (uint)b;
-                LblBank.Text = b.ToString();
+                App.InvReadParams.bank = (uint)b;
+                item.ItemValueText = b.ToString();               
             }
             catch (Exception ex)
             {
@@ -61,7 +67,7 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             }
         }
 
-        async void OnButtonTypeClicked(object sender, EventArgs e)
+        async void HandleTypeSelection(ListItem item)
         {
             string[] arr = Enum.GetNames(typeof(InventoryReadType));
             IndexDictionary dict = new IndexDictionary(arr);
@@ -73,8 +79,8 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             {
                 Array values = Enum.GetValues(typeof(InventoryReadType));
                 InventoryReadType type = (InventoryReadType)values.GetValue(levelIndex);
-                mInvReadParams.type = (uint)type;
-                LblType.Text = type.ToString();
+                App.InvReadParams.type = (uint)type;
+                item.ItemValueText = type.ToString();                
             }
             catch (Exception ex)
             {
@@ -82,16 +88,16 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             }
         }
 
-        async void OnButtonAddrClicked(object sender, EventArgs e)
+        async void HandleAddrSelection(ListItem item)
         {            
-            string result = await DisplayPromptAsync("Set start address", "(word)", "OK", "Cancel", mInvReadParams.wAddress.ToString(), maxLength: 2, keyboard: Keyboard.Numeric);
+            string result = await DisplayPromptAsync("Set start address", "(word)", "OK", "Cancel", App.InvReadParams.wAddress.ToString(), maxLength: 2, keyboard: Keyboard.Numeric, App.InvReadParams.wAddress.ToString());
 
             //TODO: Validating
 
             try
             {
-                mInvReadParams.wAddress = Convert.ToUInt32(result);
-                LblStartAddr.Text = mInvReadParams.wAddress.ToString();
+                App.InvReadParams.wAddress = Convert.ToUInt32(result);
+                item.ItemValueText = App.InvReadParams.wAddress.ToString();                
             }
             catch (Exception ex)
             {
@@ -99,16 +105,16 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             }
         }
 
-        async void OnButtonwordsClicked(object sender, EventArgs e)
+        async void HandleWordCountSelection(ListItem item)
         {
-            string result = await DisplayPromptAsync("Set word count", "Num of words to read", "OK", "Cancel", mInvReadParams.wLength.ToString(), maxLength: 2, keyboard: Keyboard.Numeric);
+            string result = await DisplayPromptAsync("Set word count", "Num of words to read", "OK", "Cancel", App.InvReadParams.wLength.ToString(), maxLength: 2, keyboard: Keyboard.Numeric, App.InvReadParams.wLength.ToString());
 
             //TODO: Validating
 
             try
             {
-                mInvReadParams.wLength = Convert.ToUInt32(result);
-                LblWordCount.Text = mInvReadParams.wLength.ToString();
+                App.InvReadParams.wLength = Convert.ToUInt32(result);
+                item.ItemValueText = App.InvReadParams.wLength.ToString();                
             }
             catch (Exception ex)
             {
@@ -116,40 +122,54 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             }
         }
 
-        async void OnButtonSaveIRClicked(object sender, EventArgs e)
+        private void MySettingsList_OnItemSelected(object sender, EventArgs e)
         {
-            try
+            //User tapped item. Selection not shown. If wanted to show something, it must be done manually.
+            ItemTappedEventArgs arg = (ItemTappedEventArgs)e;
+            ListItem item = (ListItem)arg.Item;
+
+            if (item.MyObject != null)
             {
-                App.Nur.SetInventoryRead(mInvReadParams);
-                await DisplayAlert("Success", "InventoryRead settings stored to module", "OK");                
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Cannot set IR settings!", ex.Message, "OK");
+                ItemID id = (ItemID)item.MyObject;
+
+                switch (id)
+                {
+                    case ItemID.Bank:
+                        HandleBankSelection(item);
+                        break;
+                    case ItemID.Type:
+                        HandleTypeSelection(item);
+                        break;
+                    case ItemID.StartAddress:
+                        HandleAddrSelection(item);
+                        break;
+                    case ItemID.WordCount:
+                        HandleWordCountSelection(item);
+                        break;
+                }
             }
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
-            //Need in order to show status messages bottom of the screen
-            App.BindStatusMessage(MyStatusBar);
 
-            try
-            {
-                mInvReadParams = App.Nur.GetInventoryRead();                
-            }
-            catch(Exception ex)
-            {               
-                await DisplayAlert("Cannot read IR settings from module!", ex.Message, "OK");
-            }
+            PrepareListItems();
 
-            PrepareControls();            
+            //This event needed when user click item
+            MySettingsList.OnItemSelected += MySettingsList_OnItemSelected;
+
+            //Assing item list to ListTemplate
+            MySettingsList.SetItemsSource(itemList);
         }
 
         protected override void OnDisappearing()
         {
-                        
+            //Save settings to device memory so we can use same settings when app started next time
+            string output = JsonConvert.SerializeObject(App.InvReadParams);
+            Preferences.Set("InvReadParams", output);            
+
+            MySettingsList.OnItemSelected -= MySettingsList_OnItemSelected;
             base.OnDisappearing();
         }
 

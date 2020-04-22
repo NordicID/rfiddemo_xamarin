@@ -8,11 +8,18 @@ using Android;
 using System.Collections.Generic;
 using Android.Support.V4.Content;
 using Android.Support.V4.App;
+using NurApiDotNet;
 using NurApiDotNet.Android;
 
 namespace nur_tools_rfiddemo_xamarin.Droid
 {
-    [Activity(Label = "nur_tools_rfiddemo_xamarin", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(
+        Label = "RFID Demo Xamarin", 
+        Icon = "@drawable/ic_launcherweb",
+        Theme = "@style/MainTheme", 
+        MainLauncher = true, 
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden
+        )]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {       
         protected override void OnCreate(Bundle savedInstanceState)
@@ -27,10 +34,9 @@ namespace nur_tools_rfiddemo_xamarin.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
           
             LoadApplication(new App());
-            
-            //Prepare NurApi and NurDeviceDiscovery instances for this platform.                       
+
+            //Prepare NurApi and NurDeviceDiscovery instances for this platform.           
             App.Nur.Init(Application.Context);
-            App.NurDeviceSearch.Init(Application.Context);
 
             RequestPermissionsManually();
         }
@@ -62,8 +68,8 @@ namespace nur_tools_rfiddemo_xamarin.Droid
         {
             try
             {
-                if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) != Permission.Granted)
-                    _permission.Add(Manifest.Permission.AccessFineLocation);
+                if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessCoarseLocation) != Permission.Granted)
+                    _permission.Add(Manifest.Permission.AccessCoarseLocation);
 
                 if (_permission.Count > 0)
                 {

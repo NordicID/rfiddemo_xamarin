@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 using NurApiDotNet;
 
 using nur_tools_rfiddemo_xamarin.Models;
-using nur_tools_rfiddemo_xamarin.Views;
-using nur_tools_rfiddemo_xamarin.Templates;
 using nur_tools_rfiddemo_xamarin.ViewModels;
-using System.Diagnostics;
 
 namespace nur_tools_rfiddemo_xamarin.Views
 {
@@ -25,9 +17,8 @@ namespace nur_tools_rfiddemo_xamarin.Views
         
         public ItemsPage()
         {
-            InitializeComponent();                        
-
-            BindingContext = viewModel = new MainPageViewModel();            
+            InitializeComponent();            
+            BindingContext = viewModel = new MainPageViewModel();                     
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -62,6 +53,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 bool sorry = false;
                 try
                 {
+                    
                     AccessoryConfig cfg = App.Nur.AccGetConfig();
                     //There is accessories but is there barcode scanner.
                     if (cfg.hasImagerScanner() == false)

@@ -5,9 +5,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
              mc:Ignorable="d"
-             x:Class="nur_tools_rfiddemo_xamarin.Views.ItemsPage"
-             Title="{Binding Title}"
-             x:Name="BrowseItemsPage">
+             x:Class="nur_tools_rfiddemo_xamarin.Views.ItemsPage">
+    
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal">
+        <Image Source="ic_launcherweb.png" HeightRequest="50" WidthRequest="50"
+               VerticalOptions="CenterAndExpand"
+               HorizontalOptions="StartAndExpand" />
+            <Label Text="Nordic ID RFID Demo" TextColor="White" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="20" />
+        </StackLayout>
+    </NavigationPage.TitleView>
        
     <StackLayout>
        

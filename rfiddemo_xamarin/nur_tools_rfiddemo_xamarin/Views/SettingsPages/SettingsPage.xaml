@@ -5,8 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
              mc:Ignorable="d"
-             x:Class="nur_tools_rfiddemo_xamarin.Views.SettingsPage"
-             Title="{Binding Title}"
+             x:Class="nur_tools_rfiddemo_xamarin.Views.SettingsPage"             
              x:Name="BrowseSettingsPage">
     <NavigationPage.TitleView>         
         <StackLayout Orientation="Horizontal">            

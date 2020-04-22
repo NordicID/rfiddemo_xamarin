@@ -14,53 +14,8 @@
     </NavigationPage.TitleView>
     
     <ContentPage.Content>
-        <StackLayout >
-
-            <Label Text="Click item to change!"
-                VerticalOptions="Start" 
-                HorizontalOptions="Start" />
-            
-            <Grid x:Name="controlGrid" RowSpacing="0" ColumnSpacing="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="45"/>
-                    <RowDefinition Height="45" />
-                    <RowDefinition Height="45" />
-                    <RowDefinition Height="45" />
-                    <RowDefinition Height="45" />
-                    <RowDefinition Height="45" />
-                    <RowDefinition Height="45" />
-                    <RowDefinition Height="45" />
-                    
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="*" />                    
-                    
-                </Grid.ColumnDefinitions>
-
-                <Button x:Name="ButtonRegion" Text="Region" Grid.Row="0" Grid.Column="0" Clicked="OnButtonRegionClicked"/>
-                <Button x:Name="ButtonTxLevel" Text="Tx level" Grid.Row="1" Grid.Column="0" Clicked="OnButtonTxlevelClicked" />
-                <Button x:Name="ButtonRxSensitivity" Text="Rx Sensitivity" Grid.Row="2" Grid.Column="0" Clicked="OnButtonRxSensitivityClicked" />
-                <Button x:Name="ButtonLinkFreq" Text="Link Frequency" Grid.Row="3" Grid.Column="0"  Clicked="OnButtonLinkFreqClicked"/>
-                <Button x:Name="ButtonRXDec" Text="RX Decoding" Grid.Row="4" Grid.Column="0" Clicked="OnButtonRXDecClicked" />
-                <Button x:Name="ButtonTXMod" Text="TX Modulation" Grid.Row="5" Grid.Column="0" Clicked="OnButtonTXModClicked" />
-                <Button x:Name="ButtonRFProfile" Text="RF Profile" Grid.Row="6" Grid.Column="0" Clicked="OnButtonRFProfileClicked" />
-                <Button x:Name="ButtonAutoTuneSetup" Text="AutoTune" Grid.Row="7" Grid.Column="0" Clicked="OnButtonAutoTuneClicked" />
-
-
-                <Label Grid.Row="0" Grid.Column="1" x:Name="LblRegion" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start" FontAttributes="None"></Label>
-                <Label Grid.Row="1" Grid.Column="1" x:Name="LblTxLevel" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Start" FontAttributes="None"></Label>
-                <Label Grid.Row="2" Grid.Column="1" x:Name="LblRxSensitivity" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Start" FontAttributes="None"></Label>
-                <Label Grid.Row="3" Grid.Column="1" x:Name="LblLinkFreq" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Start" FontAttributes="None"></Label>
-                <Label Grid.Row="4" Grid.Column="1" x:Name="LblRXDec" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Start" FontAttributes="None"></Label>
-                <Label Grid.Row="5" Grid.Column="1" x:Name="LblTXMod" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Start" FontAttributes="None"></Label>
-                <Label Grid.Row="6" Grid.Column="1" x:Name="LblRFProfile" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Start" FontAttributes="None"></Label>
-                <Label Grid.Row="7" Grid.Column="1" x:Name="LblAutoTune" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Start" FontAttributes="None"></Label>
-
-            </Grid>
-            
-            <templates:StatusBar x:Name="MyStatusBar" />
+        <StackLayout Orientation="Vertical">
+            <templates:ListTemplate x:Name="MySettingsList" />
         </StackLayout>
-       
     </ContentPage.Content>
 </ContentPage>

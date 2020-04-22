@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"            
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"       
+             xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates"
+             mc:Ignorable="d"
+             x:Class="nur_tools_rfiddemo_xamarin.Templates.ListTemplate">
+
+    <ListView x:Name="ListItemsView" HasUnevenRows="True" 
+            ItemTapped="OnItemTapped"                     
+            ItemsSource="{Binding ListItem}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                <ViewCell>
+                    <StackLayout HeightRequest="{Binding CellHeight}" Orientation="Horizontal" BackgroundColor="{Binding BkColor}" >
+                        <Image Source="{Binding ImageSource}" WidthRequest="{Binding ImageWidth}" />
+                            <StackLayout Orientation="Vertical" Margin="15,0,0,0">
+                                
+                            <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand">
+                                <Grid IsVisible="{Binding SingleRow}" RowSpacing="0" ColumnSpacing="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="180" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label  Grid.Row="0" Grid.Column="0" Text="{Binding ItemHeaderText}"                                
+                                            LineBreakMode="WordWrap"                                
+                                            FontSize="{Binding ItemHeaderFontSize}"        
+                                            FontAttributes="{Binding ItemHeaderFontAttribute}"
+                                            FontFamily="{Binding ItemHeaderFontFamily}"
+                                            HorizontalOptions="Start"
+                                           VerticalOptions="CenterAndExpand"
+                                            TextColor="{Binding ItemHeaderTextColor}"/>
+                                    <Label Grid.Row="0" Grid.Column="1" Text="{Binding ItemValueText}"                                
+                                            LineBreakMode="WordWrap"                                
+                                            FontSize="{Binding ItemValueFontSize}"   
+                                           FontAttributes="{Binding ItemValueFontAttribute}"
+                                            FontFamily="{Binding ItemValueFontFamily}"
+                                            HorizontalOptions="Start"
+                                            TextColor="{Binding ItemValueColor}"/>
+                                </Grid>
+
+                                <Grid IsVisible="{Binding SingleRow, Converter={templates:InverseBoolConverter}}" RowSpacing="0" ColumnSpacing="0" >
+
+                                    <Label Grid.Row="0" Grid.Column="0" Text="{Binding ItemHeaderText}"
+                                            LineBreakMode="WordWrap"                                
+                                            FontSize="{Binding ItemHeaderFontSize}"        
+                                            FontAttributes="{Binding ItemHeaderFontAttribute}"
+                                            FontFamily="{Binding ItemHeaderFontFamily}"
+                                            HorizontalOptions="Start"
+                                           VerticalOptions="CenterAndExpand"
+                                            TextColor="{Binding ItemHeaderTextColor}"/>
+                                    <Label Grid.Row="1" Grid.Column="0" Text="{Binding ItemValueText}"                                
+                                            LineBreakMode="WordWrap"                                
+                                            FontSize="{Binding ItemValueFontSize}"   
+                                           FontAttributes="{Binding ItemValueFontAttribute}"
+                                            FontFamily="{Binding ItemValueFontFamily}"
+                                            HorizontalOptions="Start"
+                                            TextColor="{Binding ItemValueColor}"/>
+                                </Grid>
+
+                            </StackLayout>
+                            
+                            
+                            </StackLayout>
+                        </StackLayout>                 
+                </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+</Frame>

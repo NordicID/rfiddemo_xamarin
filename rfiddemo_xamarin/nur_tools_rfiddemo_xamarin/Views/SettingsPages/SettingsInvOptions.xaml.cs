@@ -4,9 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
-
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -24,8 +25,15 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
         {
             try
             {
+                if(EnableIR.IsToggled)
+                {
+                    App.Nur.SetInventoryRead(App.InvReadParams);
+                    string output = JsonConvert.SerializeObject(App.InvReadParams);
+                    Preferences.Set("InvReadParams", output);
+                }
+
                 App.Nur.InventoryReadCtl = EnableIR.IsToggled;
-                App.IsInventoryReadEnabled = EnableIR.IsToggled;
+                App.IsInventoryReadEnabled = EnableIR.IsToggled;                                
             }
             catch (Exception ex)
             {
