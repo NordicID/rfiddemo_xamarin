@@ -29,16 +29,71 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
         private async void WriteEPC(Tag curTag)
         {            
-            string newEPC = await DisplayPromptAsync("New EPC", " Type HEX strings using WORD boundary", "OK", "Cancel", curTag.GetEpcString(), maxLength: 40,null, curTag.GetEpcString());
+            string newEPC = await DisplayPromptAsync("New EPC", "Type HEX strings using WORD boundary", "OK", "Cancel", curTag.GetEpcString(), maxLength: 40,null, curTag.GetEpcString());
             if (newEPC == null) return;
 
             if (newEPC.Length > 0)
             {
                 try
                 {
-                    //Let's try write singulated using selected EPC
+                    //Let's try first write a new EPC without secure parameters. Singulated using selected EPC
                     App.Nur.WriteEPCByEPC(0, false, curTag.GetEpcString(), newEPC);
                     await DisplayAlert("Write succeed!", "New EPC succesfully written", "OK");
+                }
+                catch (NurApiException ex)
+                {
+                    if(ex.error == 4111)
+                    {
+                        //Cannot write because EPC secured. Let's ask password and try again..
+                        string accPWD = await DisplayPromptAsync("EPC memory locked by password!", "Type password", "OK", "Cancel", "", maxLength: 10, Keyboard.Numeric, "");
+                        
+                        if (string.IsNullOrEmpty(accPWD))
+                            return;
+
+                        if (accPWD.Length > 0)
+                        {
+                            try
+                            {
+                                //Convert password string to UINT
+                                uint pwd = Convert.ToUInt32(accPWD);
+
+                                //Let's try write using selected EPC and password
+                                App.Nur.WriteEPCByEPC(pwd, true, curTag.GetEpcString(), newEPC);
+                                await DisplayAlert("Write succeed!", "New EPC succesfully written", "OK");
+                            }
+                            catch (Exception exx)
+                            {
+                                await DisplayAlert("Operation Failed!", exx.Message, "OK");
+                            }
+                        }
+                    }
+                    else 
+                        await DisplayAlert("Write Failed!", ex.Message, "OK");
+                }
+            }
+        }
+
+        private async void WriteUSER(Tag curTag)
+        {
+            // Show current user data if available.
+            // Required Settings --> InventoryRead: Bank=User, Type=EPCData, Start address=0, Word count = <number of words to be read> (max 32)"            
+
+            string curUser = "";
+            if (curTag.irData != null)
+            {               
+                curUser = new string(BinToHexString(curTag.irData).ToCharArray(),0, (int)App.InvReadParams.wLength*4);                
+            }
+
+            string newUSER = await DisplayPromptAsync("Write to USER memory", "Type HEX strings using WORD boundary", "OK", "Cancel", curUser, maxLength: 64, null, curUser);
+            if (newUSER == null) return;
+
+            if (newUSER.Length > 0)
+            {
+                try
+                {
+                    //Let's try write to user mem. Singulate using selected EPC.
+                    App.Nur.WriteTagByEPC(0, false, curTag.epc,BANK_USER,0,HexStringToBin(newUSER));
+                    await DisplayAlert("Write succeed!", "Data to USER memory succesfully written", "OK");
                 }
                 catch (Exception ex)
                 {
@@ -69,9 +124,9 @@ namespace nur_tools_rfiddemo_xamarin.Views
             }
         }
                 
-        private async void SetAccessPassword(Tag curTag)
+        private async void SetAccessPasswordAndLock(Tag curTag)
         {            
-            string accPWD = await DisplayPromptAsync("Set access password", "Type Access password", "OK", "Cancel", null, maxLength: 20, Keyboard.Numeric,"");
+            string accPWD = await DisplayPromptAsync("Set access password & lock EPC memory", "Type Access password", "OK", "Cancel", null, maxLength: 20, Keyboard.Numeric,"");
             if (accPWD == null) return;
 
             if (accPWD.Length > 0)
@@ -83,6 +138,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
                     //Set new access password assuming operation not need to be secured.
                     App.Nur.SetAccessPasswordByEPC(0,false,curTag.epc,pwd);
+                    App.Nur.SetLockByEPC(pwd, curTag.epc, LOCK_EPCMEM, LOCK_SECURED);
 
                     await DisplayAlert("Operation succeed!", "Access password set.", "OK");
                 }
@@ -127,7 +183,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
             if (App.Nur.IsInventoryStreamRunning())
                 InventoryEnable(false); //Stop inventory and wait user selection
 
-            string[] arr = { "Locate", "Write EPC", "Set Access password", "Set Kill password", "Kill" };
+            string[] arr = { "Locate", "Write EPC", "Write USER mem", "Lock EPC memory", "Set Kill password", "Kill" };
             string action = await DisplayActionSheet("Select Tag action", "Cancel", null, arr);
 
             if (action == "Locate")
@@ -139,9 +195,13 @@ namespace nur_tools_rfiddemo_xamarin.Views
             {
                 WriteEPC(item);
             }
-            else if (action == "Set Access password")
+            if (action == "Write USER mem")
             {
-                SetAccessPassword(item);
+                WriteUSER(item);
+            }
+            else if (action == "Lock EPC memory")
+            {
+                SetAccessPasswordAndLock(item);
             }
             else if (action == "Set Kill password")
             {
@@ -179,6 +239,9 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 }
                 else
                 {
+                    if(App.InvReadParams.active)
+                        App.Nur.SetInventoryRead(App.InvReadParams); //Make sure inventory read settings set
+
                     //Start      
                     if (App.IsInventoryExEnabled)
                     {

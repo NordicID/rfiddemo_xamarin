@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
+             mc:Ignorable="d"
+             x:Class="nur_tools_rfiddemo_xamarin.Views.SettingsPages.SettingsGPIO">
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal">
+            <Image Source="ic_settings.png" WidthRequest="55"/>
+            <Label Text="GPIO settings" VerticalOptions="Center" TextColor="Black" FontSize="Title" />
+        </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentPage.Content>       
+        <StackLayout Orientation="Vertical">
+            <templates:ListTemplate x:Name="MySettingsList" VerticalOptions="StartAndExpand" />
+            <templates:StatusBar x:Name="MyStatusBar" />
+        </StackLayout>
+     
+    </ContentPage.Content>
+</ContentPage>

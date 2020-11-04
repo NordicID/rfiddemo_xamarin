@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Xamarin.Essentials;
 using System.Diagnostics;
+using Android.App.Admin;
 
 namespace nur_tools_rfiddemo_xamarin.Views
 {
@@ -109,6 +110,25 @@ namespace nur_tools_rfiddemo_xamarin.Views
             App.Nur.Disconnect();
             App.ShowShortStatusMessage("Discovering devices..", 100, Color.Yellow, Color.Black);
         }
+                         
+        async void OnConnectIntegratedReaderClicked(object sender, EventArgs e)
+        {                       
+            try
+            {
+                //Trying connect to integrated reader..
+                string addr = "tcp://127.0.0.1:6734/?name=" + DeviceInfo.Model;
+                Uri uri = new Uri(addr);
+                App.Nur.Connect(uri);
+                Preferences.Set("lastTCP", uri.ToString());
+                App.ShowShortStatusMessage("Connecting to " + uri.ToString(), 100, Color.Yellow, Color.Black);
+
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Operation failed!", ex.Message, "OK");
+                return;
+            }
+        }
 
         async void OnConnectTCPClicked(object sender, EventArgs e)
         {
@@ -121,6 +141,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 Uri uri = new Uri("tcp://" + result);
                 App.Nur.Connect(uri);
                 Preferences.Set("lastTCP", uri.ToString());
+                App.ShowShortStatusMessage("Connecting to " + uri.ToString(), 100, Color.Yellow, Color.Black);
 
             }
             catch (Exception ex)
@@ -145,6 +166,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
                     ConnectedDevice = UriList[e.ItemIndex];
 
                     App.Nur.Connect(ConnectedDevice);
+                    App.ShowShortStatusMessage("Connecting to " + ConnectedDevice.ToString(), 100, Color.Yellow, Color.Black);
 
                     //Deselect Item
                     ((Xamarin.Forms.ListView)sender).SelectedItem = null;

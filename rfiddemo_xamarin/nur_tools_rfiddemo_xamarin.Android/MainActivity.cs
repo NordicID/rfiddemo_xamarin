@@ -37,7 +37,7 @@ namespace nur_tools_rfiddemo_xamarin.Droid
 
             //Prepare NurApi and NurDeviceDiscovery instances for this platform.           
             App.Nur.Init(Application.Context);
-
+            
             RequestPermissionsManually();
         }
 

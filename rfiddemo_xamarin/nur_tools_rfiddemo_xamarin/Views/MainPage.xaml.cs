@@ -33,18 +33,22 @@ namespace nur_tools_rfiddemo_xamarin.Views
                     PushPage(new AboutPage());
                     break;
                 case (int)MenuItemType.Updates:
-                    await DisplayAlert("Sorry","Not implemented!", "OK");
+                    if (App.Nur.IsConnected())
+                    {                        
+                        PushPage(new UpdatesPage());
+                    }
+                    else await DisplayAlert("No connection", "Connect to reader first", "OK");
                     break;
             }
 
         }
 
         public async void PushPage(ContentPage page)
-        {
+        {            
             await Detail.Navigation.PushAsync(page);
-
-            //if (Device.RuntimePlatform == Device.Android)
-            //    await Task.Delay(100);
+            
+            if (Device.RuntimePlatform == Device.Android)
+                await Task.Delay(100);
 
             IsPresented = false;
         }

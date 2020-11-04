@@ -31,6 +31,7 @@
                
             </ListView>
 
+            <Button Text="Integrated reader" IsVisible="True" x:Name="IntRdrButton" Clicked="OnConnectIntegratedReaderClicked"></Button>
             <Button Text="TCP Connection" IsVisible="True" x:Name="TCPButton" Clicked="OnConnectTCPClicked"></Button>
             <Button Text="Disconnect" IsVisible="True" x:Name="DisconnectButton" Clicked="OnDisconnectClicked"></Button>
             <templates:StatusBar x:Name="MyStatusBar" />             

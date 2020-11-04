@@ -24,16 +24,11 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
         async void OnSwitchEnableIRChanged(object sender, EventArgs e)
         {
             try
-            {
-                if(EnableIR.IsToggled)
-                {
-                    App.Nur.SetInventoryRead(App.InvReadParams);
-                    string output = JsonConvert.SerializeObject(App.InvReadParams);
-                    Preferences.Set("InvReadParams", output);
-                }
-
-                App.Nur.InventoryReadCtl = EnableIR.IsToggled;
-                App.IsInventoryReadEnabled = EnableIR.IsToggled;                                
+            {               
+                App.InvReadParams.active = EnableIR.IsToggled;
+                App.Nur.SetInventoryRead(App.InvReadParams);
+                string output = JsonConvert.SerializeObject(App.InvReadParams);
+                Preferences.Set("InvReadParams", output);
             }
             catch (Exception ex)
             {
@@ -91,7 +86,8 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             
             try
             {
-                EnableIR.IsToggled = App.Nur.InventoryReadCtl;
+                //EnableIR.IsToggled = App.Nur.InventoryReadCtl;
+                EnableIR.IsToggled = App.InvReadParams.active;
                 EnableInvEx.IsToggled = App.IsInventoryExEnabled;
                 SwitchShowGs1.IsToggled = App.IsShowGS1CodedTags;
                 SwitchShowOnlyGs1.IsToggled  = App.IsShowOnlyGS1CodedTags;

@@ -27,8 +27,10 @@ namespace nur_tools_rfiddemo_xamarin
                        
             Nur.ConnectionStatusEvent += MNurApi_TransportStatusEvent;
 
-            //mNurApi.SetLogLevel(NurApi.LOG_ALL);
-            //mNurApi.SetLogToStdout(true);
+            //======= Uncomment these two lines if need to get log information from the NurApi ==============
+            //Nur.SetLogLevel(NurApi.LOG_ALL);
+            //Nur.SetLogToStdout(true);
+
             Nur.LogEvent += MNurApi_LogEvent;                      
 
             MainPage = new MainPage();
@@ -47,6 +49,7 @@ namespace nur_tools_rfiddemo_xamarin
                 try
                 {
                     AntennaList = Nur.GetAntennaList();
+                    App.Nur.AccBeep(5); //Give short beep to reader
                 } 
                 catch (Exception)
                 {
@@ -128,12 +131,7 @@ namespace nur_tools_rfiddemo_xamarin
         /// Holding InventoryRead params. These will be put in module when activated in InvOptions
         /// </summary>
         public static IrInformation InvReadParams { get; set; } = new IrInformation();
-
-        /// <summary>
-        /// True if Inventroy Read settings is taking accouct when doing inventory
-        /// </summary>
-        public static bool IsInventoryReadEnabled { get; set; } = new bool();
-
+                
         /// <summary>
         /// True if inventory results shows 'Pure Uri' instead of EPC if tag is GS1 coded.
         /// </summary>

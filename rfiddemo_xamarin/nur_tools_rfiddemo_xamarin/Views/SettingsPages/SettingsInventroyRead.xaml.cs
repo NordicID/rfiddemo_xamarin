@@ -57,8 +57,8 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             try
             {                
                 Array bankValues = Enum.GetValues(typeof(Bank));
-                Bank b = (Bank)bankValues.GetValue(levelIndex);
-                App.InvReadParams.bank = (uint)b;
+                Bank b = (Bank)bankValues.GetValue(levelIndex);                
+                App.InvReadParams.bank = (uint)b;               
                 item.ItemValueText = b.ToString();               
             }
             catch (Exception ex)
@@ -79,7 +79,7 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             {
                 Array values = Enum.GetValues(typeof(InventoryReadType));
                 InventoryReadType type = (InventoryReadType)values.GetValue(levelIndex);
-                App.InvReadParams.type = (uint)type;
+                App.InvReadParams.type = (uint)type;               
                 item.ItemValueText = type.ToString();                
             }
             catch (Exception ex)
@@ -96,7 +96,7 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
 
             try
             {
-                App.InvReadParams.wAddress = Convert.ToUInt32(result);
+                App.InvReadParams.wAddress = Convert.ToUInt32(result);               
                 item.ItemValueText = App.InvReadParams.wAddress.ToString();                
             }
             catch (Exception ex)
@@ -113,7 +113,7 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
 
             try
             {
-                App.InvReadParams.wLength = Convert.ToUInt32(result);
+                App.InvReadParams.wLength = Convert.ToUInt32(result);                
                 item.ItemValueText = App.InvReadParams.wLength.ToString();                
             }
             catch (Exception ex)
@@ -146,7 +146,7 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
                     case ItemID.WordCount:
                         HandleWordCountSelection(item);
                         break;
-                }
+                }              
             }
         }
 
@@ -163,11 +163,20 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             MySettingsList.SetItemsSource(itemList);
         }
 
-        protected override void OnDisappearing()
-        {
-            //Save settings to device memory so we can use same settings when app started next time
-            string output = JsonConvert.SerializeObject(App.InvReadParams);
-            Preferences.Set("InvReadParams", output);            
+        protected override async void OnDisappearing()
+        {            
+            try
+            {
+                App.Nur.SetInventoryRead(App.InvReadParams); //Apply new setting
+                //Save settings to device memory so we can use same settings when app started next time
+                string output = JsonConvert.SerializeObject(App.InvReadParams);               
+                Preferences.Set("InvReadParams", output);
+            }
+            catch(Exception e)
+            {
+                await DisplayAlert("Operation failed!", e.Message, "OK");
+            }
+                     
 
             MySettingsList.OnItemSelected -= MySettingsList_OnItemSelected;
             base.OnDisappearing();

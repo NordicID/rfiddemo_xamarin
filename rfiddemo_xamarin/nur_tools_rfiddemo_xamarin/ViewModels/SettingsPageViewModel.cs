@@ -30,14 +30,14 @@ namespace nur_tools_rfiddemo_xamarin.ViewModels
                 Items.Clear();
                 
                 Items.Add(new Item { itemSettings = SettingsPageItem.RFID, Text = "RFID", Description = "RFID Link settings", ImageName = "ic_settings.png" });
-                Items.Add(new Item { itemSettings = SettingsPageItem.Inventory, Text = "Inventory", Description = "Inventory settings", ImageName = "ic_settings.png" });
-                Items.Add(new Item { itemSettings = SettingsPageItem.StoreSetup, Text = "Save RFID- and Inventory settings", Description = "Saved to non-volatile memory of module", ImageName = "saveToModule.png" });
+                Items.Add(new Item { itemSettings = SettingsPageItem.Inventory, Text = "Inventory", Description = "Inventory settings", ImageName = "ic_settings.png" });                
                 Items.Add(new Item { itemSettings = SettingsPageItem.InventoryRead, Text = "Inventory Read", Description = "Inventory Read settings", ImageName = "ic_settings.png" });
                 Items.Add(new Item { itemSettings = SettingsPageItem.InventoryEx, Text = "InventoryEx", Description = "Inventory Ex settings", ImageName = "ic_settings.png" });                
-                Items.Add(new Item { itemSettings = SettingsPageItem.Antenna, Text = "Antenna", Description = "Antenna setup", ImageName = "ic_settings.png" });                
-                //Items.Add(new Item { itemSettings = SettingsPageItem.Barcode, Text = "Barcode", Description = "Imager test/configuration", ImageName = "ic_settings.png" });
-                //Items.Add(new Item { itemSettings = SettingsPageItem.Reader, Text = "Reader", Description = "General reader specific settings", ImageName = "ic_settings.png" });
-                //Items.Add(new Item { itemSettings = SettingsPageItem.Sensors, Text = "Sensors", Description = "Sensor settings", ImageName = "ic_settings.png" });
+                Items.Add(new Item { itemSettings = SettingsPageItem.Antenna, Text = "Antenna", Description = "Antenna setup", ImageName = "ic_settings.png" });
+                Items.Add(new Item { itemSettings = SettingsPageItem.GPIO, Text = "GPIO", Description = "GPIO pin settings", ImageName = "ic_settings.png" });
+                //Items.Add(new Item { itemSettings = SettingsPageItem.Export, Text = "Export", Description = "Data export settings", ImageName = "ic_export.png" });
+                Items.Add(new Item { itemSettings = SettingsPageItem.StoreSetup, Text = "Save RFID- and Inventory settings", Description = "Saved to non-volatile memory of module", ImageName = "saveToModule.png" });
+                Items.Add(new Item { itemSettings = SettingsPageItem.FactoryDefaults, Text = "Restore factory defaults", Description = "Set RFID module to its factory default settings", ImageName = "ic_factory_reset.png" });
 
             }
             catch (Exception ex)

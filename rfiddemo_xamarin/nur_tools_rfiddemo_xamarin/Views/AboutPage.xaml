@@ -21,19 +21,20 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid x:Name="aboutGrid"> 
+    <Grid x:Name="aboutGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="55" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackLayout BackgroundColor="White" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
-                <ContentView Padding="0,40,0,40" VerticalOptions="FillAndExpand">
-                    <Image Source="nordic_id.png" VerticalOptions="Center" HeightRequest="64" />
+            <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">
+                <ContentView Padding="0,20,0,20" VerticalOptions="FillAndExpand">
+                    <Image Source="nordic_id.png" VerticalOptions="Center" HeightRequest="32" />                    
                 </ContentView>
+                <ActivityIndicator x:Name="actIndicator" HorizontalOptions="Center"></ActivityIndicator>
             </StackLayout>
         </StackLayout>
-        <ScrollView Grid.Row="1">
+        <ScrollView Grid.Row="1">            
             <templates:ListTemplate x:Name="AboutList" />
         </ScrollView>
     </Grid>

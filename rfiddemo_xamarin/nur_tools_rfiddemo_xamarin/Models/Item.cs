@@ -8,7 +8,8 @@ namespace nur_tools_rfiddemo_xamarin.Models
         Settings,
         Inventory,
         SensorTag,
-        Barcode
+        Barcode,
+        GPIO
     }
 
     public enum SettingsPageItem
@@ -22,7 +23,10 @@ namespace nur_tools_rfiddemo_xamarin.Models
         Antenna,
         Barcode,
         Application,
-        StoreSetup
+        StoreSetup,
+        GPIO,
+        FactoryDefaults,
+        Export
     }
 
     public class Item

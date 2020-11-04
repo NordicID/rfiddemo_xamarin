@@ -32,6 +32,12 @@ namespace nur_tools_rfiddemo_xamarin.Views
             if (item == null)
                 return;
 
+            if (!App.Nur.IsConnected())
+            {
+                await DisplayAlert("No reader connection", "Connect to reader first. ", "OK");
+                return;
+            }
+
             if (item.itemSettings == SettingsPageItem.RFID)
             {
                 await Navigation.PushAsync(new SettingsRFID());
@@ -50,8 +56,17 @@ namespace nur_tools_rfiddemo_xamarin.Views
             }
             else if (item.itemSettings == SettingsPageItem.InventoryEx)
             {
-                //await Navigation.PushAsync(new SettingsPages.SettingsInventoryExtended());
                 await Navigation.PushAsync(new SettingsPages.SettingsInvExt());
+            }
+            else if (item.itemSettings == SettingsPageItem.GPIO)
+            {
+                if (App.Nur.Capabilites.maxGPIO > 0)
+                    await Navigation.PushAsync(new SettingsPages.SettingsGPIO());
+                else await DisplayAlert("Sorry", "No GPIO available for this device", "OK");
+            }
+            else if(item.itemSettings == SettingsPageItem.Export)
+            {                
+                await Navigation.PushAsync(new SettingsPages.SettingsExport());
             }
             else if (item.itemSettings == SettingsPageItem.Reader)
             {
@@ -73,14 +88,32 @@ namespace nur_tools_rfiddemo_xamarin.Views
                     App.ShowShortStatusMessage("Settings stored successfully", 3, Color.White, Color.Green);
 
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     await DisplayAlert("Operation failed!", ex.Message, "OK");
                 }
             }
+            else if (item.itemSettings == SettingsPageItem.FactoryDefaults)
+            {
+                Device.BeginInvokeOnMainThread(async () => {
+                    var result = await DisplayAlert("Restoring factory defaults", "Are you sure?", "Yes", "No");
+                    if (result)
+                    {
+                        try
+                        {
+                            App.Nur.FactoryReset(0x994F6B32);
+                            App.ShowShortStatusMessage("Restoring factory defaults..", 3, Color.White, Color.Green);
+                        }
+                        catch (Exception ex)
+                        {
+                            await DisplayAlert("Operation failed!", ex.Message, "OK");
+                        }
+                    }
+                });                
+            }
 
-            // Manually deselect item.
-            ItemsListView.SelectedItem = null;
+                // Manually deselect item.
+                ItemsListView.SelectedItem = null;
         }
         
         protected override void OnAppearing()

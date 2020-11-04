@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.2.0.0</AssemblyVersion>
     <Company>Nordic ID</Company>
     <Product>RFID Demo</Product>
     <Authors>Nordic ID</Authors>
@@ -15,7 +15,7 @@
     <Description>Explore the most common RFID applications with the Nordic ID RFID Demo App. Combine this app with your Nordic ID RFID reader for easy demonstrations of RFID inventory, write and locate functionalities. Compile inventory lists of your tagged items and discover how RFID can easily guide you to a specific item. If your device includes a barcode scanner, the app also allows you to experience barcode reading.</Description>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <Win32Resource />
-    <Version>2.0.0</Version>
+    <Version>2.2.0</Version>
     <AssemblyName>nur_tools_rfiddemo_xamarin</AssemblyName>
   </PropertyGroup>
 
@@ -28,9 +28,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Rg.Plugins.Popup" Version="1.2.0.223" />
 
-    <PackageReference Include="Xamarin.Forms" Version="4.5.0.617" />  
-    <PackageReference Include="Xamarin.Essentials" Version="1.5.3" />  
-    <PackageReference Include="Zeroconf" Version="3.3.16" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1560" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />  
+    <PackageReference Include="Xamarin.Plugin.FilePicker" Version="2.1.41" />  
+    <PackageReference Include="Zeroconf" Version="3.4.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +46,9 @@
     </Reference>
     <Reference Include="NordicID.NurApi.Support">
       <HintPath>..\..\NidRefs\NordicID.NurApi.Support.dll</HintPath>
+    </Reference>
+    <Reference Include="NordicID.UpdateLib.Net">
+      <HintPath>..\..\NidRefs\NordicID.UpdateLib.Net.dll</HintPath>
     </Reference>
 
   </ItemGroup>

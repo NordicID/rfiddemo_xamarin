@@ -121,6 +121,12 @@
     <Content Include="..\nur_tools_rfiddemo_xamarin\Images\ic_enabled.png">
       <Link>ic_enabled.png</Link>
     </Content>
+    <Content Include="..\nur_tools_rfiddemo_xamarin\Images\ic_export.png">
+      <Link>ic_export.png</Link>
+    </Content>
+    <Content Include="..\nur_tools_rfiddemo_xamarin\Images\ic_factory_reset.png">
+      <Link>ic_factory_reset.png</Link>
+    </Content>
     <Content Include="..\nur_tools_rfiddemo_xamarin\Images\ic_filter.png">
       <Link>ic_filter.png</Link>
     </Content>
@@ -213,11 +219,11 @@
     <PackageReference Include="Rg.Plugins.Popup">
       <Version>1.2.0.223</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="4.5.0.617" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1560" />
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.10" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.5.3" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="Zeroconf">
-      <Version>3.3.16</Version>
+      <Version>3.4.2</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -227,16 +233,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="NordicID.NurApi.DotnetCore, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\NidRefs\NordicID.NurApi.DotnetCore.dll</HintPath>
+    <Reference Include="NordicID.NurApi.DotnetCore">
+      <HintPath>..\..\nur_nurapi_csharp\NordicID.NurApi.DotnetCore\bin\Debug\netcoreapp2.0\NordicID.NurApi.DotnetCore.dll</HintPath>
     </Reference>
     <Reference Include="NordicID.NurApi.Net, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\NidRefs\NordicID.NurApi.Net.dll</HintPath>
     </Reference>
-    <Reference Include="NordicID.NurApi.Support, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="NordicID.NurApi.Support">
       <HintPath>..\..\NidRefs\NordicID.NurApi.Support.dll</HintPath>
     </Reference>
   </ItemGroup>

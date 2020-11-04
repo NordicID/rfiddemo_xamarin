@@ -43,7 +43,7 @@
                                     <StackLayout Orientation="Horizontal">
                                        
                                         <Label Text="{Binding EPC}"                                
-                                            LineBreakMode="NoWrap"                                
+                                            LineBreakMode="CharacterWrap"                                
                                             FontSize="14" 
                                             HorizontalOptions="Start"
                                             TextColor="{Binding EPCColor}"/>
