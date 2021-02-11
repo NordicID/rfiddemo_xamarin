@@ -9,13 +9,11 @@ using static NurApiDotNet.NurApi;
 using System.Diagnostics;
 using Xamarin.Essentials;
 using Newtonsoft.Json;
-using NurApiDotNet.Android;
 
 namespace nur_tools_rfiddemo_xamarin
 {
     public partial class App : Application
-    {        
-        //static NurApi mNurApi;
+    {           
         static StatusBar curStatus;
         static int showMsgTime;
 
@@ -28,7 +26,7 @@ namespace nur_tools_rfiddemo_xamarin
             Nur.ConnectionStatusEvent += MNurApi_TransportStatusEvent;
 
             //======= Uncomment these two lines if need to get log information from the NurApi ==============
-            //Nur.SetLogLevel(NurApi.LOG_ALL);
+            //Nur.SetLogLevel(NurApi.LOG_VERBOSE);
             //Nur.SetLogToStdout(true);
 
             Nur.LogEvent += MNurApi_LogEvent;                      
@@ -49,12 +47,12 @@ namespace nur_tools_rfiddemo_xamarin
                 try
                 {
                     AntennaList = Nur.GetAntennaList();
-                    App.Nur.AccBeep(5); //Give short beep to reader
+                    Nur.AccBeep(5); //Give short beep to reader
                 } 
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    return;
-                }
+                    Debug.WriteLine("Cannot read AntennaList: " + ex.Message);
+                }                                
             }
 
             ShowShortStatusMessage("", 0, Color.Black, Color.Black);
@@ -72,17 +70,13 @@ namespace nur_tools_rfiddemo_xamarin
                 if (string.IsNullOrEmpty(name))
                     name = Nur.Info.name;
 
-                sBar.SetText("CONNECTED TO: " + name); //Nur.ConnectedDeviceUri?.GetQueryParam("name")); ;
+                sBar.SetText("CONNECTED TO: " + name);
                 sBar.SetTextColor(Color.LightGreen);
 
             }
             else if (App.Nur.ConnectionStatus == NurTransportStatus.Connecting)
-            {
-                string name = Nur.ConnectedDeviceUri?.GetQueryParam("name");
-                if (string.IsNullOrEmpty(name))
-                    name = App.Nur.ConnectedDeviceUri.ToString();
-
-                sBar.SetText("CONNECTING TO: " +  name);
+            {                       
+                sBar.SetText("CONNECTING...");
                 sBar.SetTextColor(Color.Yellow);
             }
             else if (App.Nur.ConnectionStatus == NurTransportStatus.Disconnected)
@@ -95,7 +89,7 @@ namespace nur_tools_rfiddemo_xamarin
         public static List<AntennaMapping> AntennaList { get; private set; }
 
         public static NurApi Nur { get; set; }
-
+                
         /// <summary>
         /// Holding InventoryEx params<br/>
         /// These cannot read from module
@@ -152,7 +146,7 @@ namespace nur_tools_rfiddemo_xamarin
             if (curStatus == null) return;
             
             // Update tag information in to the UI                          
-            Device.BeginInvokeOnMainThread(async () =>
+            Device.BeginInvokeOnMainThread(() =>
             {
                 try
                 {

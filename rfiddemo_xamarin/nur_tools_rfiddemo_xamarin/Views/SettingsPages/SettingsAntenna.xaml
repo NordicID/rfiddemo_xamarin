@@ -31,13 +31,13 @@
                     <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button x:Name="ButtonAutoTune" Text="AutoTune" Grid.Row="0" Grid.Column="0" Clicked="OnButtonAutoTuneSetupClicked"/>
-                <Label Grid.Row="0" Grid.Column="1" x:Name="LblAutoTuneSetup" Text="N/A" TextColor="Accent" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start" FontAttributes="None"></Label>
+                <Button x:Name="ButtonAutoTune" Text="AutoTune" BackgroundColor="LightBlue" TextColor="Black" Grid.Row="0" Grid.Column="0" Clicked="OnButtonAutoTuneSetupClicked"/>
+                <Label Grid.Row="0" Grid.Column="1" x:Name="LblAutoTuneSetup" Text="N/A" TextColor="Blue" FontSize="Small" Padding="13" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start" FontAttributes="None"></Label>
 
             </Grid>
-            
-            <Button Text="Tune enabled antenna(s)" Clicked="OnTuneClicked"></Button>
-            <Button Text="Measure reflected power" Clicked="OnMeasRefPwrClicked"></Button>
+
+            <Button Text="Tune enabled antenna(s)" BackgroundColor="LightBlue" TextColor="Black" Clicked="OnTuneClicked"></Button>
+            <Button Text="Measure reflected power" BackgroundColor="LightBlue" TextColor="Black" Clicked="OnMeasRefPwrClicked"></Button>
             <templates:StatusBar x:Name="MyStatusBar" />
         </StackLayout>
     </ContentPage.Content>

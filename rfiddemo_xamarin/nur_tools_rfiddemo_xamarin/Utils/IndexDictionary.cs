@@ -4,6 +4,9 @@ using System.Text;
 
 namespace nur_tools_rfiddemo_xamarin
 {
+    /// <summary>
+    /// IndexDictionary is used in settings where user select item from list.
+    /// </summary>
     public class IndexDictionary
     {
         readonly Dictionary<string, int> indexDict;

@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using static NurApiDotNet.NurApi;
 using Rg.Plugins.Popup.Services;
 using NordicID.NurApi.Support.TDT;
-using NurApiDotNet.Support;
+using NordicID.NurApi.Support;
 using nur_tools_rfiddemo_xamarin.Views.SettingsPages;
 
 namespace nur_tools_rfiddemo_xamarin.Views
@@ -24,7 +24,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
         public InventoryPage()
         {
-            InitializeComponent();           
+            InitializeComponent();                        
         }
 
         private async void WriteEPC(Tag curTag)
@@ -33,11 +33,17 @@ namespace nur_tools_rfiddemo_xamarin.Views
             if (newEPC == null) return;
 
             if (newEPC.Length > 0)
-            {
+            {                               
+                //When writing to Tag memory, its recommended to provide enough Tx-power to the tag for reliable write operation.
+                int origTx = App.Nur.TxLevel; //Get original TxLevel
+                App.Nur.TxLevel = 0; //Set full power. (0= no attenuation)                
+                
                 try
                 {
+                    
                     //Let's try first write a new EPC without secure parameters. Singulated using selected EPC
                     App.Nur.WriteEPCByEPC(0, false, curTag.GetEpcString(), newEPC);
+                   
                     await DisplayAlert("Write succeed!", "New EPC succesfully written", "OK");
                 }
                 catch (NurApiException ex)
@@ -70,6 +76,8 @@ namespace nur_tools_rfiddemo_xamarin.Views
                     else 
                         await DisplayAlert("Write Failed!", ex.Message, "OK");
                 }
+
+                App.Nur.TxLevel = origTx; //Put original back.
             }
         }
 
@@ -89,6 +97,10 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
             if (newUSER.Length > 0)
             {
+                //When writing to Tag memory, its recommended to provide enough Tx-power to the tag for reliable write operation.
+                int origTx = App.Nur.TxLevel; //Get original TxLevel
+                App.Nur.TxLevel = 0; //Set full power. (0= no attenuation)  
+
                 try
                 {
                     //Let's try write to user mem. Singulate using selected EPC.
@@ -99,9 +111,11 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 {
                     await DisplayAlert("Write Failed!", ex.Message, "OK");
                 }
+
+                App.Nur.TxLevel = origTx; //Put original back.
             }
         }
-
+                
         private async void KillTag(Tag curTag)
         {            
             string killPWD = await DisplayPromptAsync("Kill tag", "Type Kill password", "OK", "Cancel", null, maxLength: 20, Keyboard.Numeric,"");
@@ -183,13 +197,26 @@ namespace nur_tools_rfiddemo_xamarin.Views
             if (App.Nur.IsInventoryStreamRunning())
                 InventoryEnable(false); //Stop inventory and wait user selection
 
-            string[] arr = { "Locate", "Write EPC", "Write USER mem", "Lock EPC memory", "Set Kill password", "Kill" };
+            string[] arr = { "Locate", "TagInfo", "Write EPC", "Write USER mem", "Lock EPC memory", "Set Kill password", "Kill" };
             string action = await DisplayActionSheet("Select Tag action", "Cancel", null, arr);
 
             if (action == "Locate")
             {
                 //Show LocateTag popup
                 await PopupNavigation.Instance.PushAsync(new LocateTagPage(item.epc));
+            }
+            if (action == "TagInfo")
+            {
+                //Read TID memory from selected tag and show TagInformation window.
+                try
+                {
+                    TagInformation tagInfo = TIDUtils.GetTagInfo(App.Nur, item);
+                    await Navigation.PushAsync(new TagInformationPage(tagInfo,item));                    
+                }
+                catch(Exception ex)
+                {
+                    await DisplayAlert("Operation Failed!", ex.Message, "OK");
+                }
             }
             if (action == "Write EPC")
             {
@@ -222,7 +249,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 return;
             }
 
-            Device.BeginInvokeOnMainThread(async () =>
+            Device.BeginInvokeOnMainThread(() =>
             {
                 if (enable == false)
                 {
@@ -231,7 +258,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
                         App.Nur.StopInventoryEx();
                     else
                         App.Nur.StopInventoryStream();
-                    
+
                     ButInvStart.Text = "START";
                     ButInvStart.BackgroundColor = Color.LightGreen;
                     stats.Stop();
@@ -239,7 +266,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 }
                 else
                 {
-                    if(App.InvReadParams.active)
+                    if (App.InvReadParams.active)
                         App.Nur.SetInventoryRead(App.InvReadParams); //Make sure inventory read settings set
 
                     //Start      
@@ -389,10 +416,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            //Need in order to show status messages bottom of the screen
-            App.BindStatusMessage(MyStatusBar);
-
+                        
             //Copy tag storage items in to the Observable collection
             tagDetails.Clear();
             TagStorage st = App.Nur.GetTagStorage();
@@ -401,12 +425,17 @@ namespace nur_tools_rfiddemo_xamarin.Views
             {
                 for (int x = 0; x < st.Count; x++)
                 {
-                    tagDetails.Add(BuildObservable(st[x]));
+                    TagDetails td = BuildObservable(st[x]);
+                    if (td != null)
+                        tagDetails.Add(td);                                        
                 }
             }
 
-            TagsView.ItemsSource = tagDetails;                     
+            TagsView.ItemsSource = tagDetails;
 
+            //Need in order to show status messages bottom of the screen
+            App.BindStatusMessage(MyStatusBar);
+                        
             App.Nur.InventoryStreamEvent += Nur_InventoryStreamEvent;
             App.Nur.InventoryExEvent += Nur_InventoryExEvent;                        
         }
@@ -451,16 +480,16 @@ namespace nur_tools_rfiddemo_xamarin.Views
             try
             {
                 // Update tag information in to the UI                          
-                Device.BeginInvokeOnMainThread(async () =>
+                Device.BeginInvokeOnMainThread(() =>
                 {
                     lock (storage)
                     {
                         //Get list of tags added and tags just updated.
-                        Dictionary<byte[],Tag> added = storage.GetAddedTags();
-                        Dictionary<byte[],Tag> updated = storage.GetUpdatedTags();
+                        Dictionary<byte[], Tag> added = storage.GetAddedTags();
+                        Dictionary<byte[], Tag> updated = storage.GetUpdatedTags();
 
                         //..for statistic purpose
-                        stats.UpdateStats(e.data.roundsDone,added.Count+updated.Count);
+                        stats.UpdateStats(e.data.roundsDone, added.Count + updated.Count);
                         ShowStats(storage.Count);
 
                         foreach (KeyValuePair<byte[], Tag> utag in updated)
@@ -474,8 +503,8 @@ namespace nur_tools_rfiddemo_xamarin.Views
                             TagDetails td = BuildObservable(atag.Value);
                             if (td != null)
                                 tagDetails.Add(td);
-                        }      
-                        
+                        }
+
                         added.Clear();
                         updated.Clear();
                     }

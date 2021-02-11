@@ -8,11 +8,7 @@
              x:Class="nur_tools_rfiddemo_xamarin.Views.AboutPage"
              xmlns:vm="clr-namespace:nur_tools_rfiddemo_xamarin.ViewModels"
              Title="{Binding Title}">
-    
-    <ContentPage.BindingContext>
-        <vm:AboutViewModel />
-    </ContentPage.BindingContext>
-    
+            
     <ContentPage.Resources>
         <ResourceDictionary>
             <Color x:Key="Primary">#2196F3</Color>

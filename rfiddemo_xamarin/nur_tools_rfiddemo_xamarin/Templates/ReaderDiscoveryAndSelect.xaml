@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame Padding="1"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
+        x:Class="nur_tools_rfiddemo_xamarin.Templates.ReaderDiscoveryAndSelect">
+    
+        <StackLayout Padding="2" >            
+            <templates:ListTemplate x:Name="ReaderList" Padding="2" />
+        </StackLayout>
+   
+</Frame>

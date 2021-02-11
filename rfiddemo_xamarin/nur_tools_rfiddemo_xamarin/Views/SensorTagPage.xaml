@@ -14,7 +14,7 @@
     </NavigationPage.TitleView>
     <ContentPage.Content>
         <StackLayout>
-            <ListView x:Name="SensorTagsView" RowHeight="60" Margin="10,0"
+            <ListView x:Name="SensorTagsView" HeightRequest="3000" RowHeight="60" Margin="10,0" VerticalOptions="FillAndExpand"
             ItemTapped="OnItemTapped"                     
             ItemsSource="{Binding SensorTagDetails}">
                 <ListView.ItemTemplate>
@@ -52,14 +52,12 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-
-            <StackLayout Orientation="Vertical">                
-                <StackLayout Orientation="Horizontal">
-                    <Button Text="READ" x:Name="ButInvStart" Clicked="OnStartInventoryClicked"></Button>
-                    <Button Text="CLEAR" x:Name="ButInvClear" Clicked="OnClearInventoryClicked"></Button>
-                </StackLayout>
-                <templates:StatusBar x:Name="MyStatusBar" />
+            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Margin="10,15">
+                <Button Text="READ" x:Name="ButInvStart" HorizontalOptions="Start" BackgroundColor="LightGreen" TextColor="Black" WidthRequest="100" Clicked="OnStartInventoryClicked"></Button>
+                <Button Text="CLEAR" x:Name="ButInvClear" HorizontalOptions="Center" BackgroundColor="LightBlue" TextColor="Black" WidthRequest="100" Clicked="OnClearInventoryClicked"></Button>   
             </StackLayout>
+            <templates:StatusBar x:Name="MyStatusBar" />
+                        
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

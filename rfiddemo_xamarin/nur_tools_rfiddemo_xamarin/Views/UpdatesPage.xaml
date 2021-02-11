@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
              mc:Ignorable="d"
              x:Class="nur_tools_rfiddemo_xamarin.Views.UpdatesPage"
              Title="Updates">
@@ -15,10 +16,12 @@
             <Label x:Name ="lblFWItems" FontSize="Medium" Text="Items" Margin="0,0,0,30" TextColor="Blue"
                 VerticalOptions="Center" 
                 HorizontalOptions="CenterAndExpand" />
-            <ProgressBar x:Name="progressBar" ProgressColor="Green" IsVisible="False" Margin="30,0,30,0"></ProgressBar>
-            <Button x:Name="buttonUpdate" Text="Start update" BackgroundColor="LightGreen" IsVisible="True" Margin="30,30,30,20"></Button>
-            <Label Text="Update device from file (*.zip)" Margin="33,0,30,0"></Label>
-            <Button x:Name="buttonLocal" Text="Local storage..." Margin="30,0,30,20"></Button>
+            <templates:ProgressCircle x:Name="progressUpdate"  Padding="2" HorizontalOptions="Center" HeightRequest="200" WidthRequest="200"/>
+
+            <Button x:Name="buttonUpdate" Text="Start update" HorizontalOptions="Center" BackgroundColor="LightGreen" IsVisible="True" Margin="30,30,30,20"></Button>
+            <Label Text="Update device from file (*.zip)" HorizontalOptions="Center" Margin="33,0,30,0"></Label>
+            <Button x:Name="buttonLocal" Text="Local storage..." BackgroundColor="LightBlue" TextColor="Black" Margin="30,0,30,20"></Button>
+           
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

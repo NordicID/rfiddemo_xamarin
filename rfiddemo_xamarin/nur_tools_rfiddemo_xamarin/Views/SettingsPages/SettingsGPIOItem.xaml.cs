@@ -30,7 +30,7 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
         {           
             itemList.Clear();
 
-            Device.BeginInvokeOnMainThread(async () =>
+            Device.BeginInvokeOnMainThread(() =>
             {
                 int gpioNum = mGpioIndex + 1;
                 GPIOHeaderText.Text = "GPIO " + gpioNum.ToString() + " settings";
@@ -41,14 +41,14 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
                 enabledItem.Selected = mGpioEntries[mGpioIndex].enabled;
                 enabledItem.ItemHeaderText = "Enable GPIO " + gpioNum.ToString();
                 GPIOEnable(enabledItem);
-                itemList.Add(enabledItem);               
+                itemList.Add(enabledItem);
 
                 GPIOEdge edge = (GPIOEdge)mGpioEntries[mGpioIndex].edge;
                 itemList.Add(new ListItem(style, "Edge", edge.ToString()));
 
                 GPIOAction action = (GPIOAction)mGpioEntries[mGpioIndex].action;
                 itemList.Add(new ListItem(style, "Action", action.ToString()));
-                
+
             });
         }
 

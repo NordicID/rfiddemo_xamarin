@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿using NurApiDotNet.iOS;
 using Foundation;
+
 using UIKit;
 
 namespace nur_tools_rfiddemo_xamarin.iOS
@@ -25,6 +23,7 @@ namespace nur_tools_rfiddemo_xamarin.iOS
             Rg.Plugins.Popup.Popup.Init();
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
+            App.Nur.Init();
 
             return base.FinishedLaunching(app, options);
         }

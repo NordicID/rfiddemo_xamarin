@@ -4,6 +4,7 @@
              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"             
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
              mc:Ignorable="d"
              x:Class="nur_tools_rfiddemo_xamarin.Views.LocateTagPage">
     <!--  You can use any elements here which are extended from Xamarin.Forms.View  -->
@@ -14,13 +15,11 @@
                  VerticalOptions="Center">
         
         <StackLayout>
-            <Label Text="Locating tag.."/>
-            <Label Text="EPC" x:Name="epcText" FontSize="18" HorizontalTextAlignment="Center"/>            
+            <Label Text="Locating tag.." FontAttributes="Bold" FontSize="20"/>
+            <Label Text="EPC" x:Name="epcText" FontSize="18" HorizontalTextAlignment="Center"/>
+            <templates:ProgressCircle x:Name="progressFound"  Padding="2" HorizontalOptions="Center" HeightRequest="220" WidthRequest="220"/>
         </StackLayout>
-        <StackLayout>            
-            <Label Text="%" x:Name="foundPros" FontSize="40" HorizontalTextAlignment="Center"/>
-        </StackLayout>
-
+        
         <Button BackgroundColor="DodgerBlue"
                 FontSize="30"
                 Text="Stop"

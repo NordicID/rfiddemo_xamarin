@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("nur_tools_rfiddemo_xamarin.iOS")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("RFIDDemo Xamarin")]
+[assembly: AssemblyDescription("RFID demo developed using Xamarin framework")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Nordic ID")]
 [assembly: AssemblyProduct("nur_tools_rfiddemo_xamarin.iOS")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

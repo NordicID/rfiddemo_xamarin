@@ -45,6 +45,8 @@ namespace nur_tools_rfiddemo_xamarin.Views
                     {
                         ListItemStyle style = new ListItemStyle("ic_settings_black", 20, Color.White, Color.Black, Color.Blue);
 
+                        style.styleCellHeight = 40;
+
                         RegionId region = (RegionId)App.Nur.Setup.regionId;
                         itemList.Add(new ListItem(style, "Region", region.ToString(), ItemID.Region));
 

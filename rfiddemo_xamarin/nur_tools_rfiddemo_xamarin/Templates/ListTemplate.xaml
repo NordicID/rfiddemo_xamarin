@@ -13,7 +13,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                 <ViewCell>
-                    <StackLayout HeightRequest="{Binding CellHeight}" Orientation="Horizontal" BackgroundColor="{Binding BkColor}" >
+                    <StackLayout HeightRequest= "{Binding CellHeight}" Orientation="Horizontal" BackgroundColor="{Binding BkColor}" >
                         <Image Source="{Binding ImageSource}" WidthRequest="{Binding ImageWidth}" />
                             <StackLayout Orientation="Vertical" Margin="15,0,0,0">
                                 

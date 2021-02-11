@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
+             x:Class="nur_tools_rfiddemo_xamarin.Views.TagInformationPage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid x:Name="aboutGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="55" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackLayout BackgroundColor="White" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
+                    <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">
+                        <ContentView Padding="0,20,0,20" VerticalOptions="FillAndExpand">
+                            <Image Source="ic_tag.png" VerticalOptions="Center" HeightRequest="32" />
+                        </ContentView>                        
+                    </StackLayout>
+                </StackLayout>
+                <ScrollView Grid.Row="1">
+                    <templates:ListTemplate x:Name="TagInfoList" />
+                </ScrollView>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

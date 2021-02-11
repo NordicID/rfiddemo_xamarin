@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-    <AssemblyVersion>2.2.0.0</AssemblyVersion>
+    <AssemblyVersion>2.3.0.0</AssemblyVersion>
     <Company>Nordic ID</Company>
     <Product>RFID Demo</Product>
     <Authors>Nordic ID</Authors>
@@ -15,8 +15,9 @@
     <Description>Explore the most common RFID applications with the Nordic ID RFID Demo App. Combine this app with your Nordic ID RFID reader for easy demonstrations of RFID inventory, write and locate functionalities. Compile inventory lists of your tagged items and discover how RFID can easily guide you to a specific item. If your device includes a barcode scanner, the app also allows you to experience barcode reading.</Description>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <Win32Resource />
-    <Version>2.2.0</Version>
+    <Version>2.3.0</Version>
     <AssemblyName>nur_tools_rfiddemo_xamarin</AssemblyName>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -27,30 +28,12 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Rg.Plugins.Popup" Version="1.2.0.223" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.2" />
 
-    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1560" />  
-    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />  
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.1931" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />  
     <PackageReference Include="Xamarin.Plugin.FilePicker" Version="2.1.41" />  
     <PackageReference Include="Zeroconf" Version="3.4.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Mono.Android">
-      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\ReferenceAssemblies\Microsoft\Framework\MonoAndroid\v9.0\Mono.Android.dll</HintPath>
-    </Reference>
-    <Reference Include="NordicID.NurApi.Android">
-      <HintPath>..\..\NidRefs\NordicID.NurApi.Android.dll</HintPath>
-    </Reference>
-    <Reference Include="NordicID.NurApi.Net">
-      <HintPath>..\..\NidRefs\NordicID.NurApi.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="NordicID.NurApi.Support">
-      <HintPath>..\..\NidRefs\NordicID.NurApi.Support.dll</HintPath>
-    </Reference>
-    <Reference Include="NordicID.UpdateLib.Net">
-      <HintPath>..\..\NidRefs\NordicID.UpdateLib.Net.dll</HintPath>
-    </Reference>
-
   </ItemGroup>
 
   <ItemGroup>
@@ -60,13 +43,25 @@
     <Compile Update="Views\LocateTagPage.xaml.cs">
       <DependentUpon>LocateTagPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\SettingsPages\SettingsGPIO.xaml.cs">
+      <DependentUpon>SettingsGPIO.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Templates\ListTemplate.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Templates\ProgressCircle.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Templates\ReaderDiscoveryAndSelect.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Templates\StatusBar.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ConnectReaderPopup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\InfoPage.xaml">
@@ -78,9 +73,6 @@
     <EmbeddedResource Update="Views\BarcodePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\DeviceSelectPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Views\InventoryPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -90,7 +82,13 @@
     <EmbeddedResource Update="Views\SettingsPages\SettingsAntenna.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\SettingsPages\SettingsExport.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\SettingsPages\SettingsFilter.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SettingsPages\SettingsGPIOItem.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SettingsPages\SettingsInventory.xaml">
@@ -105,10 +103,19 @@
     <EmbeddedResource Update="Views\SettingsPages\SettingsInvOptions.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\SettingsPages\SettingsGPIO.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\SettingsPages\SettingsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SettingsPages\SettingsRFID.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\TagInformationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\UpdatesPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -118,5 +125,17 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="NordicID.NurApi.Net">
+      <HintPath>..\..\NidRefs\NordicID.NurApi.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NordicID.NurApi.Support">
+      <HintPath>..\..\NidRefs\NordicID.NurApi.Support.dll</HintPath>
+    </Reference>
+    <Reference Include="NordicID.UpdateLib.Net">
+      <HintPath>..\..\NidRefs\NordicID.UpdateLib.Net.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

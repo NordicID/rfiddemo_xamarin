@@ -31,9 +31,11 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
         {           
             itemList.Clear();
 
-            Device.BeginInvokeOnMainThread(async () =>
+            Device.BeginInvokeOnMainThread(() =>
             {
                 ListItemStyle style = new ListItemStyle("ic_settings_black", 20, Color.White, Color.Black, Color.Blue);
+
+                style.styleCellHeight = 40;
 
                 Bank bank = (Bank)App.InvReadParams.bank;
                 itemList.Add(new ListItem(style, "Bank", bank.ToString(), ItemID.Bank));

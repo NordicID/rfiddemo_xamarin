@@ -14,6 +14,7 @@
     <AssemblyName>nur_tools_rfiddemo_xamarin.iOS</AssemblyName>
     <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <ProvisioningType>automatic</ProvisioningType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,6 +27,7 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <IOSDebugOverWiFi>false</IOSDebugOverWiFi>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -45,11 +47,17 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey></CodesignKey>
     <MtouchDebug>true</MtouchDebug>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignEntitlements>
+    </CodesignEntitlements>
     <MtouchLink>None</MtouchLink>
     <MtouchInterpreter>-all</MtouchInterpreter>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <CodesignExtraArgs />
+    <CodesignResourceRules />
+    <DeviceSpecificBuild>false</DeviceSpecificBuild>
+    <MtouchExtraArgs>-v -v -v -v</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -58,8 +66,17 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey></CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchLink>None</MtouchLink>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
+    <AppExtensionDebugBundleId />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -123,6 +140,12 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="NordicId.NurApi.iOS">
+      <HintPath>..\..\NidRefs\NordicId.NurApi.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="NordicID.NurApi.Net">
+      <HintPath>..\..\NidRefs\NordicID.NurApi.Net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -131,20 +154,14 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NordicID.NurApi.iOS">
-      <Version>1.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="NordicID.NurApi.Support">
-      <Version>1.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="NurApiDotNet">
-      <Version>2.0.2</Version>
-    </PackageReference>
     <PackageReference Include="Rg.Plugins.Popup">
       <Version>1.2.0.223</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="4.4.0.991477" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.1931" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+    <PackageReference Include="Xamarin.Plugin.FilePicker">
+      <Version>2.1.41</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -154,42 +171,116 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\connection.png" />
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\connection.png">
+      <Link>Resources\connection.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_barcode.png" />
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_barcode.png">
+      <Link>Resources\ic_barcode.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_inventory.png" />
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_box.png">
+      <Link>Resources\ic_box.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_locate.png" />
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_disabled.png">
+      <Link>Resources\ic_disabled.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_nfc.png" />
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_enabled.png">
+      <Link>Resources\ic_enabled.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_nfc_black.png" />
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_filter.png">
+      <Link>Resources\ic_filter.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_nfc_logo.png" />
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_info.png">
+      <Link>Resources\ic_info.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_settings.png" />
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_info_blue.png">
+      <Link>Resources\ic_info_blue.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_tag.png" />
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_inventory.png">
+      <Link>Resources\ic_inventory.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_tagauth.png" />
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_launcherweb.png">
+      <Link>Resources\ic_launcherweb.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_write.png" />
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_locate.png">
+      <Link>Resources\ic_locate.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\nordic_id.png" />
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_nfc.png">
+      <Link>Resources\ic_nfc.png</Link>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\saveToModule.png" />
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_nfc_black.png">
+      <Link>Resources\ic_nfc_black.png</Link>
+    </BundleResource>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_nfc_logo.png">
+      <Link>Resources\ic_nfc_logo.png</Link>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_settings.png">
+      <Link>Resources\ic_settings.png</Link>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_settings_black.png">
+      <Link>Resources\ic_settings_black.png</Link>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_tag.png">
+      <Link>Resources\ic_tag.png</Link>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_write.png">
+      <Link>Resources\ic_write.png</Link>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\nordic_id.png">
+      <Link>Resources\nordic_id.png</Link>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\saveToModule.png">
+      <Link>Resources\saveToModule.png</Link>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\nur_tools_rfiddemo_xamarin\Images\ic_factory_reset.png">
+      <Link>Resources\ic_factory_reset.png</Link>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties TriggeredFromHotReload="False" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

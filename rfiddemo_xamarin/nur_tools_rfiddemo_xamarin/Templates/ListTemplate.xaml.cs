@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -77,7 +72,7 @@ namespace nur_tools_rfiddemo_xamarin.Templates
             styleBkColor = Color.White;
             styleImageSource = "";
             styleImageWidth = "25";
-            styleCellHeight = 40;
+            styleCellHeight = -1; // 40;
             styleHdrColor = Color.Black;
             styleValueColor = Color.Blue;
             styleHdrFontSize = 16;

@@ -14,7 +14,7 @@
     </NavigationPage.TitleView>
     <ContentPage.Content>
         <StackLayout>
-            <StackLayout Orientation="Vertical" BackgroundColor="Black">
+            <StackLayout Orientation="Vertical" VerticalOptions="Start" BackgroundColor="Black" Padding="4">
                 <StackLayout Orientation="Horizontal" BackgroundColor="Black">
                     <Label Text="Unique Tags" FontSize="Small" TextColor="White" WidthRequest="150"></Label>
                     <Label Text="Tags/sec" FontSize="Small" TextColor="White" WidthRequest="70"></Label>                    
@@ -27,11 +27,11 @@
                     <Label x:Name="LabelUniqueTagsInTime" FontSize="Small" Text="(in 0 sec)" WidthRequest="110" TextColor="White"></Label>
                     <Label x:Name="LabelTagsPerSec" Text="0" WidthRequest="55" TextColor="LightGreen"></Label>
                     <Label x:Name="LabelMaxTagsPerSec" Text="0" WidthRequest="45" TextColor="LightGreen"></Label>
-                    <Label x:Name="LabelRounds" Text="0" WidthRequest="50" TextColor="LightGreen"></Label>
+                    <Label x:Name="LabelRounds" Text="0" WidthRequest="100" TextColor="LightGreen"></Label>
                 </StackLayout>
             </StackLayout>
 
-            <ListView x:Name="TagsView" RowHeight="60" Margin="10,0"
+            <ListView x:Name="TagsView" HeightRequest="3000" RowHeight="60" Margin="10,0" VerticalOptions="FillAndExpand"
             ItemTapped="OnItemTapped"                     
             ItemsSource="{Binding TagDetails}">
                 <ListView.ItemTemplate>
@@ -57,12 +57,11 @@
                                             HorizontalOptions="Start"
                                             TextColor="DarkGreen"/>
                                         <Label Text="RSSI" TextColor="Black" FontSize="12"></Label>
-                                        <Label Text="{Binding RSSI}"                                                                            
-                                               
+                                        <Label Text="{Binding RSSI}"                                           
                                             TextColor="Red"
                                             FontSize="12" />
                                         <Label Text="dBm" TextColor="Black" FontSize="12"></Label>
-                                        <ProgressBar ProgressColor="RoyalBlue" Progress="{Binding RSSIScaled}" HorizontalOptions="EndAndExpand">
+                                        <ProgressBar ProgressColor="RoyalBlue" Progress="{Binding RSSIScaled}" WidthRequest="75" HorizontalOptions="EndAndExpand">
                                         </ProgressBar>
                                     </StackLayout>
                                 </StackLayout>
@@ -70,14 +69,14 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>               
-           
-            <StackLayout Orientation="Horizontal" Padding="5">
-                <Button Text="START" x:Name="ButInvStart" Clicked="OnStartInventoryClicked"></Button>
-                <Button Text="CLEAR" x:Name="ButInvClear" Clicked="OnClearInventoryClicked"></Button>
-                <Button Text="Options.." x:Name="ButInvOptions" WidthRequest="120" Clicked="OnInvOptionsClicked"></Button>
-            </StackLayout>
+            </ListView>
 
+            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand" Margin="10,15">
+                <Button Text="START" x:Name="ButInvStart" HorizontalOptions="Start" BackgroundColor="LightGreen" TextColor="Black" WidthRequest="100" Clicked="OnStartInventoryClicked"></Button>
+                <Button Text="CLEAR" x:Name="ButInvClear" HorizontalOptions="Center" BackgroundColor="LightBlue" TextColor="Black" WidthRequest="100" Clicked="OnClearInventoryClicked"></Button>
+                <Button Text="Options.." x:Name="ButInvOptions" HorizontalOptions="End" BackgroundColor="LightBlue" TextColor="Black" WidthRequest="120" Clicked="OnInvOptionsClicked"></Button>
+                
+            </StackLayout>
             <templates:StatusBar x:Name="MyStatusBar" />
 
         </StackLayout>

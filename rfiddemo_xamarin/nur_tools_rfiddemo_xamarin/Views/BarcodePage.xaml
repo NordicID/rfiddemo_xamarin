@@ -19,7 +19,7 @@
                    FontSize="Medium"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="Center" />
-            <Button x:Name="startButton" Text="Start / Stop" VerticalOptions="End" HorizontalOptions="Center" Clicked="OnStartClicked"></Button>
+            <Button x:Name="startButton" Text="Start / Stop" HeightRequest="100" WidthRequest="150" BackgroundColor="LightBlue" TextColor="Black" VerticalOptions="End" HorizontalOptions="Center" Clicked="OnStartClicked"></Button>
             <templates:StatusBar x:Name="MyStatusBar" />
         </StackLayout>
         

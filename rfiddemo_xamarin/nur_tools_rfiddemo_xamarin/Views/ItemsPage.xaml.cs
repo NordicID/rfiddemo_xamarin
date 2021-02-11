@@ -5,6 +5,7 @@ using NurApiDotNet;
 
 using nur_tools_rfiddemo_xamarin.Models;
 using nur_tools_rfiddemo_xamarin.ViewModels;
+using Rg.Plugins.Popup.Services;
 
 namespace nur_tools_rfiddemo_xamarin.Views
 {
@@ -29,8 +30,8 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 return;
 
             if (item.itemMain == MainPageItem.Connection)
-            {
-                await Navigation.PushAsync(new DeviceSelectPage());
+            {                                
+                await PopupNavigation.Instance.PushAsync(new ConnectReaderPopup());
             }
             else if (item.itemMain == MainPageItem.Settings)
             {

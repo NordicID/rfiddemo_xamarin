@@ -34,9 +34,10 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
 
             itemList.Clear();
 
-            Device.BeginInvokeOnMainThread(async () =>
+            Device.BeginInvokeOnMainThread(() =>
             {
                 ListItemStyle style = new ListItemStyle("ic_settings_black", 20, Color.White, Color.Black, Color.Blue);
+                style.styleCellHeight = 40;
 
                 ListItem enabledItem = new ListItem();
                 enabledItem.Selected = (mIndex == 0) ? App.IsExtFilter1Enabled : App.IsExtFilter2Enabled;

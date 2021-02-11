@@ -120,22 +120,23 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
         private async void CheckIfNeedToAim(int timeoutInSeconds)
         {
-                await Task.Run(async () => {
-                try
+                await Task.Run(() =>
                 {
-                    Thread.Sleep(timeoutInSeconds);
-
-                    if (isTriggerDown == true && isReading == false) //If trigger still down after timeout
+                    try
                     {
-                        App.Nur.AccImagerAim(true);
+                        Thread.Sleep(timeoutInSeconds);
+
+                        if (isTriggerDown == true && isReading == false) //If trigger still down after timeout
+                        {
+                            App.Nur.AccImagerAim(true);
                             App.ShowShortStatusMessage("Aiming...", 4, Color.Blue, Color.LightGray);
+                        }
                     }
-                }
-                catch (Exception)
-                {
-                    // Handle error here
-                }
-            });
+                    catch (Exception)
+                    {
+                        // Handle error here
+                    }
+                });
         }
 
         private void UpdateStatusText(string status)

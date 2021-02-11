@@ -6,42 +6,30 @@ Build RFID apps for Android, iOS, and Windows by using Visual Studio(2019). This
  
 - `NordicID.NurApi.Net.dll` .NET Standard 2.0 Class Library
 - `NordicID.NurApi.Android.dll` Android related functions like BLE scanner and transport.
+- `NordicID.NurApi.iOS.dll` IOS related functions like BLE scanner and transport.
 - `NordicID.NurApi.Support.dll` Helper classes for complicated RFID tasks like Sensor Tag reading, Tag Locating and Tag Data Translation operations.
+- `NordicID.UpdateLib.Net.dll` .NET Standard 2.0 Class Library for updating Nordic ID reader firmware. *(Note: Currently,  EXA device firmware cannot update with this library.)*
 
 `NordicID.NurApi.Net.dll` is code compatible with NurApiDotNet class library for Windows .NETFramework. using same namespace: `NurApiDotNet`
 
 Development of these libraries  are ongoing. Please check updates frequently on this page. In case you need help, please contact to NordicID support. (support@nordicid.com)
-####  Running sample on HH53 and HH8x
-These type of readers has integrated RFID reader module. (NUR).
-Connecting RFIDDemo to internal RFID module, go to Connection page and press “INTEGRATED READER” button.
+####  Connecting to reader
+Run demo and select "Connection" from main menu. The device discovery will be activated and trying to search available Bluetooth LE (EXA) devices and other readers attached to the TCP network. Select device from list to connect. The NordicID HHxx devices has Integrated reader. Connecting to the Integrated reader programmatically:
+`Uri intUri = new Uri("int://integrated_reader/?name=" + "Integrated reader");
+App.Nur.Connect(newUri);`
 
-## Release 4.11.2020
-#### `NurApi.Net v3.0.3`
- - Fix GPIO enable config
- - Fix `Connect()`function to perform connection in to the last connected reader.
- - Backward compatibility for `SetLogFilePath()`
- - Improved packet resend handling.
-#### `NurApi.Support v2.0.1`
- - Fixed LocateTag for supporting different type of readers.
- #### `RFIDDemo App v2.2.0`
- - New sample features: GPIO settings, Connection to integrated reader, FW updates, Write to USER mem, Lock EPC mem, Improved Locate tag...
- - About screen view improvements.
-- This sample developed and tested for Android
- -  iOS support comes later. 
- - UWP works but there is some image displaying and text input issues.
-  - Prebuilt *apk [RFID Demo Xamarin version 2.2.0 for Android](https://github.com/NordicID/rfiddemo_xamarin/releases/tag/v2.2.0)
-## Release 22.4.2020
-**Note! Major changes compared to release 1.3.2020**
-Applications developed using previous versions of NurApi libraries are not directly compatible with this release.  Changes concerns mainly for the transport and device discovery functionalities.
+## Release 11.2.2021
+#### `RFIDDemo App v2.3.0`
+ - **IOS support**
+- This sample developed and tested for Android and IOS
+- Device connection Popup window
+- Progress circle for LocateTag and Update
+- TagInfo Read and parse TID bank. (NurApi.Support feature `TIDUtils`)
+ - Prebuilt *apk [RFID Demo Xamarin version 2.3.0 for Android](https://github.com/NordicID/rfiddemo_xamarin/releases/tag/v2.3.0)
+#### `NurApi.Net v3.0.4`
+ - Nur Internal Transport.
+  #### `NordicId.NurApi.iOS v1.0.0`
+  - BLE transport fixes
+#### `NurApi.Support v2.2.0`
+- Added TIDUtils for easy reading and parsing TID bank.
 
- - Prebuilt *apk [RFID Demo Xamarin version 2.0.0 for Android](https://github.com/NordicID/rfiddemo_xamarin/releases/tag/v2.0.0)
- - New versions. `NurApi.Net 3.0.0` `NurApi.Android 2.0.0` `NurApi.Support 2.0.0`
- - This sample developed and tested using Android.
- -  iOS support comes later. 
- - UWP works but there is some image displaying and text input issues.
-
-## Release 1.3.2020
-- Initial release versions. `..NurApi.Net.Dll 2.0.0` `..Android.dll 1.0.0` `..Support.Dll 1.0.0`
-- This sample developed and tested using Android.
--  iOS and UWP support comes later. 
-- BLE and TCP transport for readers supported.

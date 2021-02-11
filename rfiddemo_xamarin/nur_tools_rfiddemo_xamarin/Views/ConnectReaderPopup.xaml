@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage Padding="10"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"  
+             xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
+            
+             x:Class="nur_tools_rfiddemo_xamarin.Views.ConnectReaderPopup">
+
+    <StackLayout 
+                 Padding="5"
+                 BackgroundColor="Black"
+                 HorizontalOptions="FillAndExpand"
+                 VerticalOptions="Center">
+        <StackLayout >
+            <Label Text="Select a device" TextColor="White" HorizontalTextAlignment="Center" FontAttributes="Bold" FontSize="20"/>        
+            <templates:ReaderDiscoveryAndSelect x:Name="readerSelect"  HorizontalOptions="CenterAndExpand" HeightRequest="320" />
+            <Button BackgroundColor="White" FontSize="20" HorizontalOptions="FillAndExpand" Text="Cancel" TextColor="Black" Clicked="OnStop" />
+        </StackLayout>
+        
+    </StackLayout>
+</pages:PopupPage>

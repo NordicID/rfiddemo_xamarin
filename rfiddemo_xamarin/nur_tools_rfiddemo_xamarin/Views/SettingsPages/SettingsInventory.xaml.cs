@@ -50,8 +50,9 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
                 {
                     try
                     {
-                        ListItemStyle style = new ListItemStyle("ic_settings_black", 10, Color.White, Color.Black, Color.Blue);                      
+                        ListItemStyle style = new ListItemStyle("ic_settings_black", 10, Color.White, Color.Black, Color.Blue);
 
+                        style.styleCellHeight = 40;
                         if (App.Nur.Setup.inventoryQ == 0) txt = "Auto";
                         else txt = App.Nur.Setup.inventoryQ.ToString();
                         itemList.Add(new ListItem(style, "Q", txt, ItemID.Q));
@@ -267,7 +268,7 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
 
         private void ShowFilterItem(ListItem item, int val)
         {
-            Device.BeginInvokeOnMainThread(async () =>
+            Device.BeginInvokeOnMainThread(() =>
             {
                 if (val == 0)
                 {

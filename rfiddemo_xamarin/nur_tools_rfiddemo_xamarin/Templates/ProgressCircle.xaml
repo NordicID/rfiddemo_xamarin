@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame BorderColor="Transparent" BackgroundColor="Transparent" Padding="0" 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+    x:Class="nur_tools_rfiddemo_xamarin.Templates.ProgressCircle">
+
+    <skia:SKCanvasView x:Name="canvas" PaintSurface="OnCanvasViewPaintSurfaceAsync" />   
+    
+</Frame>

@@ -40,11 +40,11 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
         async void OnStartInventoryClicked(object sender, EventArgs e)
         {
-            await Task.Run(async () => {
-
+            await Task.Run(() =>
+            {
                 try
                 {
-                    App.ShowShortStatusMessage("Reading...", 4, Color.White, Color.Black);                
+                    App.ShowShortStatusMessage("Reading...", 4, Color.White, Color.Black);
                     List<SensorTagItem> sTags = sensorTag.ReadSensorTagsMagnus();
 
                     //Update tags to list
@@ -92,19 +92,19 @@ namespace nur_tools_rfiddemo_xamarin.Views
         
         private void AddOrUpdateObservable(SensorTagItem sensorTagitem)
         {
-            Device.BeginInvokeOnMainThread(async () =>
+            Device.BeginInvokeOnMainThread(() =>
             {
                 var item = sensorTagDetails.FirstOrDefault(i => i.Code == sensorTagitem.epc);
                 if (item != null)
                 {
-                    UpdateSensorTagDetails(item, sensorTagitem);                    
+                    UpdateSensorTagDetails(item, sensorTagitem);
                 }
                 else
                 {
                     //Add
                     SensorTagDetails detail = new SensorTagDetails();
-                    UpdateSensorTagDetails(detail, sensorTagitem);                                   
-                    sensorTagDetails.Add(detail);                  
+                    UpdateSensorTagDetails(detail, sensorTagitem);
+                    sensorTagDetails.Add(detail);
                 }
             });            
         }

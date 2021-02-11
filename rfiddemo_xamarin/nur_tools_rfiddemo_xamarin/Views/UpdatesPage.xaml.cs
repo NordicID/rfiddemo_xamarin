@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Android.Media;
-using Android.Security;
-using Android.Service.Voice;
-using Java.Util.Concurrent;
 using NordicID.UpdateLib;
 using Plugin.FilePicker;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Xamarin.Forms.Xaml.Internals;
 using static NordicID.UpdateLib.NurUpdate;
 
 namespace nur_tools_rfiddemo_xamarin.Views
@@ -21,13 +14,14 @@ namespace nur_tools_rfiddemo_xamarin.Views
     public partial class UpdatesPage : ContentPage
     {
         NurUpdate upd;
+        
         string mTxtHdr;
         string mTxtItem;
         Color mColorHdr;
         bool isAvailUpdatesChecked;
         bool isUpdatesAvailable;
         bool isUpdateFromFile;
-        double mProgress; //0-1
+        int mProgress;
                         
         public UpdatesPage()
         {
@@ -42,6 +36,15 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
             mProgress = 0;
 
+            progressUpdate.GaugeValueTextColor = Color.Black;
+            progressUpdate.GaugeRadialWidth = 50;
+            progressUpdate.RangeMax = 100;
+            progressUpdate.RangeMin = 0;
+            progressUpdate.GaugeUnitTextColor = Color.DarkRed;
+            progressUpdate.GaugeUnitText = "%";
+
+            progressUpdate.IsVisible = false;
+
             buttonUpdate.Clicked += ButtonUpdate_Clicked;
             buttonLocal.Clicked += ButtonLocal_Clicked;
         }
@@ -51,7 +54,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
             string[] fileTypes = null;
             if (Device.RuntimePlatform == Device.Android)
             {
-                fileTypes = new string[] { "Update files/zip" };
+                fileTypes = new string[] { "Update files/zip" };               
             }
 
             if (Device.RuntimePlatform == Device.iOS)
@@ -69,18 +72,19 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
         private async Task StartUpdate()
         {
-            await Task.Run(async () => {
+            await Task.Run(() =>
+            {
                 try
-                {  
-                   upd.StartUpdate();                    
+                {
+                    upd.StartUpdate();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     mTxtHdr = "Error (StartUpdate)";
                     mColorHdr = Color.Red;
                     mTxtItem = e.Message;
                     Console.WriteLine("EXCEPTION STARTUPDATE:" + e.Message);
-                }                   
+                }
 
                 UpdateUI();
             });
@@ -91,8 +95,8 @@ namespace nur_tools_rfiddemo_xamarin.Views
             switch(e.niduEvent)
             {
                 case Event.PROGRESS:
-                    mProgress = e.prg / 100.0;
-                    mTxtHdr = "Programming.. " + e.prg.ToString()+"%";
+                    mProgress = e.prg;
+                    mTxtHdr = "Programming.. "; // + e.prg.ToString()+"%";
                     break;
                 case Event.LOG:
                     Debug.WriteLine(e.msg);
@@ -121,6 +125,11 @@ namespace nur_tools_rfiddemo_xamarin.Views
                         isUpdateFromFile = false;
                         isAvailUpdatesChecked = false;
                     }
+
+                    //Do the connect cycle to get fresh information from reader.
+                    App.Nur.Disconnect();
+                    App.Nur.Connect();
+
                     break;
                 case Event.PRG_ITEM_START:
                     //Specific update item is about to start programming.
@@ -249,7 +258,8 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
         private async Task LoadAvailUpdatesAsync()
         {
-            await Task.Run(async () => {
+            await Task.Run(() =>
+            {
                 try
                 {
                     List<UpdateItem> items = upd.GetAvailableUpdatesFromNordicIDServer();
@@ -274,7 +284,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
                         mColorHdr = Color.Green;
                         mTxtItem = "";
                         isUpdatesAvailable = false;
-                    }                                       
+                    }
                 }
                 catch (Exception e)
                 {
@@ -298,9 +308,12 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 buttonUpdate.IsVisible = isUpdatesAvailable;
                 if(mProgress>0)
                 {
-                    progressBar.IsVisible = true;
-                    progressBar.Progress = mProgress;
+                    if(!progressUpdate.IsVisible)
+                        progressUpdate.IsVisible = true;
+                    progressUpdate.SetProgress(mProgress);                                       
                 }
+                else
+                    progressUpdate.IsVisible = false;
             });
         }        
 

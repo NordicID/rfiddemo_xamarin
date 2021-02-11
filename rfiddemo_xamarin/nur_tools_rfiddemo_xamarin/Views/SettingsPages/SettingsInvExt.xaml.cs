@@ -37,31 +37,35 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
             
             itemList.Clear();
 
-            Device.BeginInvokeOnMainThread(async () =>
+            Device.BeginInvokeOnMainThread(() =>
             {
                 ListItemStyle style = new ListItemStyle("ic_settings_black", 20, Color.White, Color.Black, Color.Blue);
 
+                style.styleCellHeight = 40;
+
                 if (App.InvExtParams.Q == 0) txt = "Auto";
                 else txt = App.InvExtParams.Q.ToString();
-                itemList.Add(new ListItem(style, "Q", txt,ItemID.Q));
+                itemList.Add(new ListItem(style, "Q", txt, ItemID.Q));
 
                 if (App.InvExtParams.rounds == 0) txt = "Auto";
                 else txt = App.InvExtParams.rounds.ToString();
-                itemList.Add(new ListItem(style, "Rounds", txt,ItemID.Rounds));
-                itemList.Add(new ListItem(style, "Session", App.InvExtParams.session.ToString(),ItemID.Session));
+                itemList.Add(new ListItem(style, "Rounds", txt, ItemID.Rounds));
+                itemList.Add(new ListItem(style, "Session", App.InvExtParams.session.ToString(), ItemID.Session));
 
                 InventoryTarget target = (InventoryTarget)App.InvExtParams.inventoryTarget;
-                itemList.Add(new ListItem(style, "Target", target.ToString(),ItemID.Target));
-                itemList.Add(new ListItem(style, "Transit time", App.InvExtParams.transitTime.ToString(),ItemID.TransitTime));
+                itemList.Add(new ListItem(style, "Target", target.ToString(), ItemID.Target));
+                itemList.Add(new ListItem(style, "Transit time", App.InvExtParams.transitTime.ToString(), ItemID.TransitTime));
 
                 InventorySelectState sel = (InventorySelectState)App.InvExtParams.inventorySelState;
-                itemList.Add(new ListItem(style, "Select state", sel.ToString(),ItemID.SelectState));
+                itemList.Add(new ListItem(style, "Select state", sel.ToString(), ItemID.SelectState));
 
                 ListItemStyle fStyle = new ListItemStyle("ic_filter.png", 20, Color.White, Color.Black, Color.Green);
 
+                fStyle.styleCellHeight = 40;
+
                 if (App.IsExtFilter1Enabled)
                 {
-                    Bank bnk = (Bank)App.InvExtFilter1.bank;                   
+                    Bank bnk = (Bank)App.InvExtFilter1.bank;
                     InventoryTarget tgt = (InventoryTarget)App.InvExtFilter1.target;
                     txt = "Act " + App.InvExtFilter1.action.ToString() + "," + bnk.ToString() + "," + App.InvExtFilter1.address.ToString() + "/" + App.InvExtFilter1.maskBitLength.ToString() + ", " + tgt.ToString() + " Data:" + NurApi.BinToHexString(App.InvExtFilter1.maskData);
                     fStyle.styleValueColor = Color.Green;
@@ -73,21 +77,21 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
                     fStyle.styleValueColor = Color.Red;
                     itemList.Add(new ListItem(fStyle, "Filter 1", "Disabled", ItemID.Filter1));
                 }
-                                
+
                 if (App.IsExtFilter2Enabled)
                 {
-                    Bank bnk = (Bank)App.InvExtFilter2.bank;                   
+                    Bank bnk = (Bank)App.InvExtFilter2.bank;
                     InventoryTarget tgt = (InventoryTarget)App.InvExtFilter2.target;
-                    txt = "Act "+ App.InvExtFilter2.action.ToString() +"," + bnk.ToString()+"," + App.InvExtFilter2.address.ToString()+"/"+App.InvExtFilter2.maskBitLength.ToString() + ", " + tgt.ToString() +" Data:" + NurApi.BinToHexString(App.InvExtFilter2.maskData);
+                    txt = "Act " + App.InvExtFilter2.action.ToString() + "," + bnk.ToString() + "," + App.InvExtFilter2.address.ToString() + "/" + App.InvExtFilter2.maskBitLength.ToString() + ", " + tgt.ToString() + " Data:" + NurApi.BinToHexString(App.InvExtFilter2.maskData);
                     fStyle.styleValueColor = Color.Green;
                     fStyle.styleSingleRow = false;
-                    itemList.Add(new ListItem(fStyle, "Filter 2", txt,ItemID.Filter2));
+                    itemList.Add(new ListItem(fStyle, "Filter 2", txt, ItemID.Filter2));
                 }
                 else
                 {
                     fStyle.styleSingleRow = true;
                     fStyle.styleValueColor = Color.Red;
-                    itemList.Add(new ListItem(fStyle, "Filter 2", "Disabled",ItemID.Filter2));
+                    itemList.Add(new ListItem(fStyle, "Filter 2", "Disabled", ItemID.Filter2));
                 }
             });
         }

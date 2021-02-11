@@ -14,7 +14,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LocateTagPage : PopupPage
     {
-        LocateTag locateTag;
+        LocateTag locateTag;        
 
         public LocateTagPage(byte [] epcBuf)
         {
@@ -22,6 +22,14 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
             locateTag = new LocateTag(App.Nur);
             epcText.Text = NurApi.BinToHexString(epcBuf);
+            
+            progressFound.GaugeValueTextColor = Color.Black;
+            progressFound.GaugeRadialWidth = 50;
+            progressFound.RangeMax = 100;
+            progressFound.RangeMin = 0;
+            progressFound.GaugeUnitTextColor = Color.DarkRed;
+            progressFound.GaugeUnitText = "%";
+
             try
             {
                 locateTag.OnLocateTag += LocateTag_OnLocateTag;
@@ -31,13 +39,40 @@ namespace nur_tools_rfiddemo_xamarin.Views
             {
                 DisplayAlert("Operation Failed!", ex.Message, "OK");
             }
+
+            // After tapping EPC text label, user can edit EPC to locate
+            var editEPCTap = new TapGestureRecognizer();
+            editEPCTap.Tapped += async (s, e) =>
+            {
+                try
+                {
+                    locateTag.Stop();
+                    string result = await DisplayPromptAsync("EPC to locate", "(Hex string as word boundary)", initialValue: epcText.Text, maxLength: 64, keyboard: Keyboard.Text);
+                    if(result != null)
+                    {
+                        //set new EPC to locate
+                        epcText.Text = result;
+                    }
+
+                    locateTag.Start(NurApi.HexStringToBin(epcText.Text)); 
+                }
+                catch (Exception ex) 
+                {
+                    await DisplayAlert("Error", ex.Message, "OK");
+                }
+            };
+            epcText.GestureRecognizers.Add(editEPCTap);
         }
 
         private void LocateTag_OnLocateTag(object sender, LocateTagEventArgs e)
         {
-            Device.BeginInvokeOnMainThread(async () =>
+            Device.BeginInvokeOnMainThread(() =>
             {
-                foundPros.Text = e.pros.ToString() + " %";
+                if (e.pros < 30) progressFound.GaugeColor = Color.Red;
+                else if (e.pros >= 30 && e.pros < 70) progressFound.GaugeColor = Color.Orange;
+                else progressFound.GaugeColor = Color.Green;
+
+                progressFound.SetProgress(e.pros);
             });
         }
         
