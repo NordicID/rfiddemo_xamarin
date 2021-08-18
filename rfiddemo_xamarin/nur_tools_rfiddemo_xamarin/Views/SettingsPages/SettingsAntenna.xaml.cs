@@ -15,21 +15,23 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
     {
         public SettingsAntenna()
         {
-            InitializeComponent();                                      
+            InitializeComponent();            
         }
 
         private async void AddAntennaSwitces()
         {
             try
             {
+                List<AntennaMapping> AntennaList;
+                AntennaList = App.Nur.GetAntennaList();
                 AntTable.Clear();
                                 
-                for (int x = 0; x < App.AntennaList.Count; x++)
+                for (int x = 0; x < AntennaList.Count; x++)
                 {
                     SwitchCell antCell = new SwitchCell();
-                    antCell.BindingContext = App.AntennaList[x];
-                    antCell.Text = App.AntennaList[x].Name;
-                    antCell.On = App.Nur.IsPhysicalAntennaEnabled(App.AntennaList[x].Name);
+                    antCell.BindingContext = AntennaList[x];
+                    antCell.Text = AntennaList[x].Name;
+                    antCell.On = App.Nur.IsPhysicalAntennaEnabled(AntennaList[x].Name);
                     antCell.OnChanged += AntCell_OnChanged;
 
                     AntTable.Add(antCell);

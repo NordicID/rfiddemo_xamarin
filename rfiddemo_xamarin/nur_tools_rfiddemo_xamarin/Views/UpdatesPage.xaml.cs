@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using NordicID.UpdateLib;
-using Plugin.FilePicker;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using static NordicID.UpdateLib.NurUpdate;
@@ -51,23 +52,9 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
         private async void ButtonLocal_Clicked(object sender, EventArgs e)
         {
-            string[] fileTypes = null;
-            if (Device.RuntimePlatform == Device.Android)
-            {
-                fileTypes = new string[] { "Update files/zip" };               
-            }
-
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                fileTypes = new string[] { "ZipArchive" }; //Most probably not work
-            }
-
-            if (Device.RuntimePlatform == Device.UWP)
-            {
-                fileTypes = new string[] { ".zip" };
-            }
-
-            await PickAndShowFile(fileTypes);
+            App.KeepReaderConnectionUpWhenSleep = true;
+            await PickAndShowFile();
+            App.KeepReaderConnectionUpWhenSleep = false;
         }
 
         private async Task StartUpdate()
@@ -184,24 +171,32 @@ namespace nur_tools_rfiddemo_xamarin.Views
             }
         }
 
-        private async Task PickAndShowFile(string[] fileTypes)
-        {
+        private async Task PickAndShowFile()
+        {           
+            var options = new PickOptions
+            {
+                PickerTitle = "Please select a zip file",
+                FileTypes = null
+            };
+
             try
             {
-                var pickedFile = await CrossFilePicker.Current.PickFile(fileTypes);
+                var pickedFile = await FilePicker.PickAsync(options);                                 
 
                 if (pickedFile != null)
-                {
-                    mTxtHdr = "Update from file";
-                    mTxtItem = pickedFile.FileName;
-                    
+                {                    
                     if (pickedFile.FileName.EndsWith("zip", StringComparison.OrdinalIgnoreCase))                  
                     {
-                        Debug.WriteLine("Picked File=" + pickedFile.FilePath);
-                        byte[] arr = new byte[pickedFile.DataArray.Length];
-                        Debug.WriteLine("FileLen=" + arr.Length.ToString());
-                        Array.Copy(pickedFile.DataArray, arr,arr.Length);
-                        upd.LoadZip(arr);                       
+                        mTxtHdr = "Update from file";
+                        mTxtItem = pickedFile.FileName;
+                        Debug.WriteLine("Picked File=" + pickedFile.FullPath);
+                        byte[] b;
+                        Stream stream = await pickedFile.OpenReadAsync();
+                        using (BinaryReader br = new BinaryReader(stream))
+                        {
+                            b = br.ReadBytes((int)stream.Length);
+                        }
+                        upd.LoadZip(b);                       
                         Error err = upd.Validate();
                         Debug.WriteLine("Validate=" +err.ToString());
 
@@ -231,10 +226,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
                             mTxtHdr = "Error loading from file";
                             mColorHdr = Color.Red;
                             mTxtItem = err.ToString() + ":" + upd.LASTERROR;
-                        }
-                        
-                        //FileImagePreview.Source = ImageSource.FromStream(() => pickedFile.GetStream());
-                        //FileImagePreview.IsVisible = true;
+                        }                                                
                     }
                     else
                     {
@@ -242,6 +234,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
                         mColorHdr = Color.Red;
                         mTxtItem = "";
                     }
+                    
                 }
                 else
                     Debug.WriteLine("Picked File FAIL");

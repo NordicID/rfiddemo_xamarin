@@ -18,18 +18,13 @@ Run demo and select "Connection" from main menu. The device discovery will be ac
 `Uri intUri = new Uri("int://integrated_reader/?name=" + "Integrated reader");
 App.Nur.Connect(newUri);`
 
-## Release 11.2.2021
-#### `RFIDDemo App v2.3.0`
- - **IOS support**
-- This sample developed and tested for Android and IOS
-- Device connection Popup window
-- Progress circle for LocateTag and Update
-- TagInfo Read and parse TID bank. (NurApi.Support feature `TIDUtils`)
- - Prebuilt *apk [RFID Demo Xamarin version 2.3.0 for Android](https://github.com/NordicID/rfiddemo_xamarin/releases/tag/v2.3.0)
-#### `NurApi.Net v3.0.4`
- - Nur Internal Transport.
-  #### `NordicId.NurApi.iOS v1.0.0`
-  - BLE transport fixes
-#### `NurApi.Support v2.2.0`
-- Added TIDUtils for easy reading and parsing TID bank.
+## Release 18.8.2021
+#### `RFIDDemo App v2.4.0`
+ - Library updates
+- This sample disconnect reader connection when app enter to inactive state (OnSleep())
+ - Prebuilt apk (Android) and *.ipa (iOS)  in Prebuilt folder.
+#### `NurApi.Net v3.0.5`
+ - Uri null check
+  #### `NordicId.NurApi.iOS v1.0.2`
+  - Fixed reader transport bug were frequent connect/disconnect causes transport failures.
 

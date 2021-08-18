@@ -29,7 +29,9 @@ namespace nur_tools_rfiddemo_xamarin
             //Nur.SetLogLevel(NurApi.LOG_VERBOSE);
             //Nur.SetLogToStdout(true);
 
-            Nur.LogEvent += MNurApi_LogEvent;                      
+            Nur.LogEvent += MNurApi_LogEvent;
+
+            KeepReaderConnectionUpWhenSleep = false; //By default, reader disconnectes when app goes to inactive state. See OnSleep()
 
             MainPage = new MainPage();
         }
@@ -42,16 +44,15 @@ namespace nur_tools_rfiddemo_xamarin
         private void MNurApi_TransportStatusEvent(object sender, NurTransportStatus e)
         {
             if (e == NurTransportStatus.Connected)
-            {
-                //Get fresh AntennaList from reader
+            {                
                 try
                 {
-                    AntennaList = Nur.GetAntennaList();
+                    AntennaList = App.Nur.GetAntennaList();
                     Nur.AccBeep(5); //Give short beep to reader
                 } 
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("Cannot read AntennaList: " + ex.Message);
+                    Debug.WriteLine("Some problems: " + ex.Message);
                 }                                
             }
 
@@ -135,11 +136,21 @@ namespace nur_tools_rfiddemo_xamarin
         /// True if inventory results shows only GS1 coded tags in inventory result.
         /// </summary>
         public static bool IsShowOnlyGS1CodedTags { get; set; } = new bool();
+     
+        /// <summary>
+        /// StatusBar messages are binded to (almost) all pages in this app
+        /// </summary>
+        /// <param name="o">MyStatusBar</param>
         public static void BindStatusMessage(StatusBar o)
         {
             curStatus = o;
             ShowShortStatusMessage("", 0, Color.Black, Color.Black);
         }
+
+        /// <summary>
+        /// When true, reader not disconnected when App going to inactive state (OnSleep)        
+        /// </summary>
+        public static bool KeepReaderConnectionUpWhenSleep { get; set; } = new bool();
 
         public static void ShowShortStatusMessage(string message, int showTimeSec, Color textColor, Color bkColor)
         {
@@ -235,32 +246,30 @@ namespace nur_tools_rfiddemo_xamarin
 
         protected override void OnSleep()
         {
+            Debug.WriteLine("OnSleep()");
+
+            if (App.Nur.IsConnected())
+            {
+                if (KeepReaderConnectionUpWhenSleep)
+                    return; //Wanted to keep connection up
+
+                Preferences.Set("was_connected", true);
+                App.Nur.Disconnect();
+            }
+            else
+                Preferences.Set("was_connected", false);
         }
 
         protected override void OnResume()
         {
-        }
-
-        public static int ValidateAndConvertToInt(string result, int min, int max)
-        {
-            int val;
-
-            if (string.IsNullOrEmpty(result))
-                throw new Exception("Cancel or no value");
-
-            try
+            Debug.WriteLine("OnResume()");
+            if (!Nur.IsConnected())
             {
-                val = Convert.ToInt32(result);
-                if (val < min || val > max)
-                    throw new Exception("Value not in range. Must be " + min.ToString() + "-" + max.ToString());
-
+                bool wasConnected = Preferences.Get("was_connected", false);
+                if (wasConnected)
+                    App.Nur.Connect(); //Connect to existing
             }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-
-            return val;
         }
+                
     }
 }
