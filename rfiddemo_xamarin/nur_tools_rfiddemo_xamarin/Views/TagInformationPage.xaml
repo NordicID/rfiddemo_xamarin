@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
-             x:Class="nur_tools_rfiddemo_xamarin.Views.TagInformationPage"
+             x:Class="nur_tools_rfiddemo_xamarin.Views.TagInformationPage"            
              Title="{Binding Title}">
     <ContentPage.Content>
         <StackLayout>
@@ -19,7 +19,7 @@
                     </StackLayout>
                 </StackLayout>
                 <ScrollView Grid.Row="1">
-                    <templates:ListTemplate x:Name="TagInfoList" />
+                    <templates:ListTemplate x:Name="TagInfoList" BackgroundColor="Transparent" />
                 </ScrollView>
             </Grid>
         </StackLayout>

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-    <AssemblyVersion>2.4.0.0</AssemblyVersion>
+    <AssemblyVersion>2.4.1.0</AssemblyVersion>
     <Company>Nordic ID</Company>
     <Product>RFID Demo</Product>
     <Authors>Nordic ID</Authors>
@@ -15,7 +15,7 @@
     <Description>Explore the most common RFID applications with the Nordic ID RFID Demo App. Combine this app with your Nordic ID RFID reader for easy demonstrations of RFID inventory, write and locate functionalities. Compile inventory lists of your tagged items and discover how RFID can easily guide you to a specific item. If your device includes a barcode scanner, the app also allows you to experience barcode reading.</Description>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <Win32Resource />
-    <Version>2.4.0</Version>
+    <Version>2.4.1</Version>
     <AssemblyName>nur_tools_rfiddemo_xamarin</AssemblyName>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>

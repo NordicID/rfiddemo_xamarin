@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
              mc:Ignorable="d"
+             BackgroundColor="White"
              x:Class="nur_tools_rfiddemo_xamarin.Views.InventoryPage">
     <NavigationPage.TitleView>
         <StackLayout Orientation="Horizontal">
@@ -31,7 +32,7 @@
                 </StackLayout>
             </StackLayout>
 
-            <ListView x:Name="TagsView" HeightRequest="3000" RowHeight="60" Margin="10,0" VerticalOptions="FillAndExpand"
+            <ListView x:Name="TagsView" BackgroundColor="White" HeightRequest="3000" RowHeight="60" Margin="10,0" VerticalOptions="FillAndExpand"
             ItemTapped="OnItemTapped"                     
             ItemsSource="{Binding TagDetails}">
                 <ListView.ItemTemplate>

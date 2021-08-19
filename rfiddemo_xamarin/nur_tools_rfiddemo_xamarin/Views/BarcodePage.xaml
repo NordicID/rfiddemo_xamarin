@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
              mc:Ignorable="d"
+             BackgroundColor="White"
              x:Class="nur_tools_rfiddemo_xamarin.Views.BarcodePage">
     <NavigationPage.TitleView>
         <StackLayout Orientation="Horizontal">

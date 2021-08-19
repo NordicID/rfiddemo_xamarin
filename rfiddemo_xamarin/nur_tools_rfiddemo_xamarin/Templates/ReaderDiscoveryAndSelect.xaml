@@ -6,7 +6,7 @@
         x:Class="nur_tools_rfiddemo_xamarin.Templates.ReaderDiscoveryAndSelect">
     
         <StackLayout Padding="2" >            
-            <templates:ListTemplate x:Name="ReaderList" Padding="2" />
+            <templates:ListTemplate x:Name="ReaderList" BackgroundColor="White" Padding="2" />
         </StackLayout>
    
 </Frame>

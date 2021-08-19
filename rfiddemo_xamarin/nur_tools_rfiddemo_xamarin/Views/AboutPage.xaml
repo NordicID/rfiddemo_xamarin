@@ -7,6 +7,7 @@
              mc:Ignorable="d"
              x:Class="nur_tools_rfiddemo_xamarin.Views.AboutPage"
              xmlns:vm="clr-namespace:nur_tools_rfiddemo_xamarin.ViewModels"
+             BackgroundColor="White"
              Title="{Binding Title}">
             
     <ContentPage.Resources>
@@ -30,8 +31,8 @@
                 <ActivityIndicator x:Name="actIndicator" HorizontalOptions="Center"></ActivityIndicator>
             </StackLayout>
         </StackLayout>
-        <ScrollView Grid.Row="1">            
-            <templates:ListTemplate x:Name="AboutList" />
+        <ScrollView Grid.Row="1">
+            <templates:ListTemplate x:Name="AboutList" BackgroundColor="White" />
         </ScrollView>
     </Grid>
     

@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:templates="clr-namespace:nur_tools_rfiddemo_xamarin.Templates;assembly=nur_tools_rfiddemo_xamarin"
-             mc:Ignorable="d"
+             mc:Ignorable="d"            
              x:Class="nur_tools_rfiddemo_xamarin.Views.ItemsPage">
     
     <NavigationPage.TitleView>
@@ -19,8 +19,9 @@
     <StackLayout>
        
         <ListView x:Name="ItemsListView"
+                BackgroundColor="White" 
                 ItemsSource="{Binding Items}"
-                VerticalOptions="FillAndExpand"
+                VerticalOptions="EndAndExpand"
                 HasUnevenRows="true"
                 RefreshCommand="{Binding LoadItemsCommand}"
                 IsPullToRefreshEnabled="true"
@@ -68,7 +69,7 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <templates:StatusBar x:Name="MyStatusBar" />
+        <templates:StatusBar x:Name="MyStatusBar"/>
 
     </StackLayout>
     

@@ -4,10 +4,10 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="nur_tools_rfiddemo_xamarin.Views.MenuPage"
+             x:Class="nur_tools_rfiddemo_xamarin.Views.MenuPage"             
              Title="Menu">
-             
-    <StackLayout VerticalOptions="FillAndExpand">
+
+    <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="White">
         <ListView x:Name="ListViewMenu"
                     HasUnevenRows="True">
             <d:ListView.ItemsSource>

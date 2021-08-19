@@ -16,7 +16,7 @@
 
     <StackLayout>
 
-        <ListView x:Name="ItemsListView"
+        <ListView x:Name="ItemsListView" BackgroundColor="White"
                 ItemsSource="{Binding Items}"
                 VerticalOptions="FillAndExpand"
                 HasUnevenRows="true"

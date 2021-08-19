@@ -18,13 +18,20 @@ Run demo and select "Connection" from main menu. The device discovery will be ac
 `Uri intUri = new Uri("int://integrated_reader/?name=" + "Integrated reader");
 App.Nur.Connect(newUri);`
 
+## Release 19.8.2021
+#### `RFIDDemo App v2.4.1`
+- Library updates 
+- More iOS DarkMode friendly
+  #### `NordicId.NurApi.iOS v1.0.3`
+  - Fixed reader BLE discovery bug from NurApi.iOS.
+
+
 ## Release 18.8.2021
 #### `RFIDDemo App v2.4.0`
- - Library updates
+ - Library updates.
 - This sample disconnect reader connection when app enter to inactive state (OnSleep())
  - Prebuilt apk (Android) and *.ipa (iOS)  in Prebuilt folder.
 #### `NurApi.Net v3.0.5`
  - Uri null check
   #### `NordicId.NurApi.iOS v1.0.2`
   - Fixed reader transport bug were frequent connect/disconnect causes transport failures.
-

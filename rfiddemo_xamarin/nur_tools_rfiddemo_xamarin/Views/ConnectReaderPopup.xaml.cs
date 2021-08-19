@@ -24,6 +24,9 @@ namespace nur_tools_rfiddemo_xamarin.Views
         private async void ConnectToUriAsync(Uri uri)
         {
             string name = uri.GetQueryParam("name");
+            if (string.IsNullOrEmpty(name))
+                return;
+
             if (name.StartsWith("External reader"))
             {
                 string result = await DisplayPromptAsync("Socket connection", "tcp://", "OK", "Cancel", "", 40, Xamarin.Forms.Keyboard.Default, uri.Host+":"+uri.Port.ToString());
@@ -57,6 +60,9 @@ namespace nur_tools_rfiddemo_xamarin.Views
                     {
                         //Device clicked already connected. Ask for just disconnect.
                         string name = App.Nur.ConnectedDeviceUri.GetQueryParam("name");
+                        if (string.IsNullOrEmpty(name))
+                            return;
+
                         bool answer = await DisplayAlert(name, "Would you like to disconnect ?", "Yes", "No");
                         if (answer)
                         {
