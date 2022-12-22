@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using nur_tools_rfiddemo_xamarin.Templates;
 using NurApiDotNet;
-using NordicID.NurApi.Support;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using NurApiDotNet.TidUtils;
 
 namespace nur_tools_rfiddemo_xamarin.Views
 {

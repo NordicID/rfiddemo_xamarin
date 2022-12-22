@@ -10,9 +10,9 @@ using nur_tools_rfiddemo_xamarin.Models;
 using System.Collections.ObjectModel;
 using static NurApiDotNet.NurApi;
 using Rg.Plugins.Popup.Services;
-using NordicID.NurApi.Support.TDT;
-using NordicID.NurApi.Support;
 using nur_tools_rfiddemo_xamarin.Views.SettingsPages;
+using NurApiDotNet.TidUtils;
+using NurApiDotNet.TagCodec.TDT;
 
 namespace nur_tools_rfiddemo_xamarin.Views
 {

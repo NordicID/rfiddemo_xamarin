@@ -26,13 +26,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.12" />
-    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="NordicID.NurApi.Net" Version="4.0.0" />
+    <PackageReference Include="NordicID.NurApi.SensorTag" Version="4.0.0" />
+    <PackageReference Include="NordicID.NurApi.TagCodec" Version="4.0.0" />
+    <PackageReference Include="NordicID.NurApi.TidUtils" Version="4.0.0" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.1.0" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.88.3" />
 
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2083" />  
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />  
-    <PackageReference Include="Zeroconf" Version="3.4.2" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.4" />  
+    <PackageReference Include="Zeroconf" Version="3.6.11" />
   </ItemGroup>
 
   <ItemGroup>
@@ -127,14 +131,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="NordicID.NurApi.Net">
-      <HintPath>..\..\NidRefs\NordicID.NurApi.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="NordicID.NurApi.Support">
-      <HintPath>..\..\NidRefs\NordicID.NurApi.Support.dll</HintPath>
-    </Reference>
     <Reference Include="NordicID.UpdateLib.Net">
-      <HintPath>..\..\NidRefs\NordicID.UpdateLib.Net.dll</HintPath>
+      <HintPath>NordicID.UpdateLib.Net.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

@@ -51,6 +51,7 @@
 
   <Capabilities>
     <Capability Name="internetClient" />
+    <Capability Name="internetClientServer"/>
     <DeviceCapability Name="bluetooth"/>
     
     <DeviceCapability Name="serialcommunication">

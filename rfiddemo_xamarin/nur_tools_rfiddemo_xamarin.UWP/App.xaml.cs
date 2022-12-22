@@ -28,6 +28,8 @@ namespace nur_tools_rfiddemo_xamarin.UWP
         /// </summary>
         public App()
         {
+            NurApiDotNet.SerialTransport.UWP.Support.Init();
+
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
@@ -49,8 +51,9 @@ namespace nur_tools_rfiddemo_xamarin.UWP
                 rootFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
+
                 Rg.Plugins.Popup.Popup.Init();
-                Xamarin.Forms.Forms.Init(e);
+                Xamarin.Forms.Forms.Init(e, Rg.Plugins.Popup.Popup.GetExtraAssemblies());
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {

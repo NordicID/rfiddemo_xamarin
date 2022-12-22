@@ -19,6 +19,10 @@ namespace nur_tools_rfiddemo_xamarin.Views
         public MainPage()
         {
             InitializeComponent();
+
+            // Check if integrated reader (running in nordic id products) is available and connect to it
+            if (NurTransportRegistry.Contains("int"))
+                App.Nur.Connect("int://integrated_reader");
                         
             //MasterBehavior = MasterBehavior.Popover;                       
         }

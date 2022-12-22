@@ -2,12 +2,13 @@
 using System.ComponentModel;
 using Xamarin.Forms;
 using NurApiDotNet;
-using NurApiDotNet.Support;
 using System.Collections.ObjectModel;
 using nur_tools_rfiddemo_xamarin.Templates;
 using Xamarin.Essentials;
 using System.Collections.Generic;
-
+using NurApiDotNet.TagCodec;
+using NurApiDotNet.TidUtils;
+using NurApiDotNet.SensorTag;
 
 namespace nur_tools_rfiddemo_xamarin.Views
 {
@@ -35,7 +36,9 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 style.styleBkColor = Color.White;
                 itemList.Add(new ListItem(style, "Application", typeof(App).Assembly.GetName().Version.ToString()));
                 itemList.Add(new ListItem(style, "NurApi", typeof(NurApi).Assembly.GetName().Version.ToString()));
-                itemList.Add(new ListItem(style, "NurApi.Support", typeof(TagCodecService).Assembly.GetName().Version.ToString()));
+                itemList.Add(new ListItem(style, "NurApi.SensorTag", typeof(SensorTag).Assembly.GetName().Version.ToString()));
+                itemList.Add(new ListItem(style, "NurApi.TidUtils", typeof(TIDUtils).Assembly.GetName().Version.ToString()));
+                itemList.Add(new ListItem(style, "NurApi.TagCodec", typeof(TagCodecService).Assembly.GetName().Version.ToString()));
 
                 style.styleBkColor = Color.FromRgb(225, 225, 220);
                 itemList.Add(new ListItem(style, "Platform & Device", ""));

@@ -5,7 +5,6 @@ using Rg.Plugins.Popup.Pages;
 using Xamarin.Forms;
 using Rg.Plugins.Popup.Services;
 using NurApiDotNet;
-using NordicID.NurApi.Support;
 using Xamarin.Forms.Xaml;
 using System.Diagnostics;
 

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using NurApiDotNet.SensorTag;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using static NurApiDotNet.NurApi;
-using NordicID.NurApi.Support;
 
 namespace nur_tools_rfiddemo_xamarin.Models
 {

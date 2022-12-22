@@ -99,7 +99,7 @@ namespace nur_tools_rfiddemo_xamarin.Templates
                 {
                     //Show device which is already connected
                     name = App.Nur.ConnectedDeviceUri.GetQueryParam("name");
-                    if (string.IsNullOrEmpty(name)) name = "Unknown";
+                    if (string.IsNullOrEmpty(name)) name = App.Nur.ConnectedDeviceUri.GetAddress();
                     style.styleValueColor = Color.Green;
                     itemList.Add(new ListItem(style, name, App.Nur.ConnectedDeviceUri.Host + " (Connected)"));
                     style.styleValueColor = Color.Black;
@@ -149,14 +149,14 @@ namespace nur_tools_rfiddemo_xamarin.Templates
 
                 string name = uri.GetQueryParam("name");
                 if (string.IsNullOrEmpty(name))
-                    name = "Unknown";
+                    name = uri.GetAddress();
 
                 if (args.Visible)
                 {
                     System.Diagnostics.Debug.WriteLine("OnDeviceDiscovered ADD " + name);
                     if(!_uriList.ContainsKey(name+uri.Host))                    
                     {
-                        string txt = uri.Host;
+                        string txt = uri.GetAddress();
                         if (App.Nur.IsConnected() && App.Nur.ConnectedDeviceUri.Equals(uri))
                         {
                             style.styleValueColor = Color.Green;

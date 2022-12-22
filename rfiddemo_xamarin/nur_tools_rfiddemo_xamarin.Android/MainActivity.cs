@@ -29,15 +29,15 @@ namespace nur_tools_rfiddemo_xamarin.Droid
 
             base.OnCreate(savedInstanceState);
 
+            //Prepare NurApi and NurDeviceDiscovery instances for this platform.           
+            NurApiDotNet.Android.Support.Init(Application.Context);
+
             Rg.Plugins.Popup.Popup.Init(this);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
           
             LoadApplication(new App());
 
-            //Prepare NurApi and NurDeviceDiscovery instances for this platform.           
-            App.Nur.Init(Application.Context);
-            
             RequestPermissionsManually();
         }
 
@@ -70,6 +70,12 @@ namespace nur_tools_rfiddemo_xamarin.Droid
             {
                 if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessCoarseLocation) != Permission.Granted)
                     _permission.Add(Manifest.Permission.AccessCoarseLocation);
+
+                if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) != Permission.Granted)
+                    _permission.Add(Manifest.Permission.AccessFineLocation);
+
+                if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.Bluetooth) != Permission.Granted)
+                    _permission.Add(Manifest.Permission.Bluetooth);
 
                 if (_permission.Count > 0)
                 {
