@@ -26,7 +26,7 @@ namespace nur_tools_rfiddemo_xamarin
             Nur.ConnectionStatusEvent += MNurApi_TransportStatusEvent;
 
             //======= Uncomment these two lines if need to get log information from the NurApi ==============
-            //Nur.SetLogLevel(NurApi.LOG_VERBOSE);
+            //Nur.SetLogLevel(Nur.GetLogLevel() | NurApi.LOG_VERBOSE);
             //Nur.SetLogToStdout(true);
 
             Nur.LogEvent += MNurApi_LogEvent;

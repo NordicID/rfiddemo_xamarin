@@ -7,6 +7,7 @@ using Rg.Plugins.Popup.Services;
 using NurApiDotNet;
 using Xamarin.Forms.Xaml;
 using System.Diagnostics;
+using NurApiDotNet.LocateTag;
 
 namespace nur_tools_rfiddemo_xamarin.Views
 {
@@ -31,7 +32,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
             try
             {
-                locateTag.OnLocateTag += LocateTag_OnLocateTag;
+                locateTag.LocateTagEvent += LocateTag_OnLocateTag;
                 locateTag.Start(epcBuf);                
             }
             catch(Exception ex)
@@ -67,11 +68,11 @@ namespace nur_tools_rfiddemo_xamarin.Views
         {
             Device.BeginInvokeOnMainThread(() =>
             {
-                if (e.pros < 30) progressFound.GaugeColor = Color.Red;
-                else if (e.pros >= 30 && e.pros < 70) progressFound.GaugeColor = Color.Orange;
+                if (e.scaledRssi < 30) progressFound.GaugeColor = Color.Red;
+                else if (e.scaledRssi >= 30 && e.scaledRssi < 70) progressFound.GaugeColor = Color.Orange;
                 else progressFound.GaugeColor = Color.Green;
 
-                progressFound.SetProgress(e.pros);
+                progressFound.SetProgress(e.scaledRssi);
             });
         }
         
@@ -107,7 +108,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
 
             base.OnDisappearing();
 
-            locateTag.OnLocateTag -= LocateTag_OnLocateTag;
+            locateTag.LocateTagEvent -= LocateTag_OnLocateTag;
            
             Debug.WriteLine("Stop LocateTag");
 
