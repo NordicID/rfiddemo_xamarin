@@ -4,6 +4,16 @@ Build RFID apps for Android, iOS, and Windows by using Visual Studio(2022). This
 ### Documentation
 See https://github.com/NordicID/nur_sample_csharp for documentation
 
+## Release 13.3.2023
+#### `RFIDDemo App v2.5.0`
+- Library updates 
+- Using NordicID.NurApi.* nugets from nuget.org
+- Export functionality for the inventory and Tag info results. ('export' icon in the upper right corner of the inventory page)
+- Data export to file system of HH8x devices and email option if account set.
+- Data share option for the non HH8x devices allowing transfer data using email, WhatsApp, Dropbox etc..
+
+
+
 ## Release 19.8.2021
 #### `RFIDDemo App v2.4.1`
 - Library updates 

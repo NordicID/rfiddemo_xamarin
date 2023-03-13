@@ -34,7 +34,8 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 style.styleCellHeight = -1;
                 itemList.Add(new ListItem(style, "App Versions", ""));
                 style.styleBkColor = Color.White;
-                itemList.Add(new ListItem(style, "Application", typeof(App).Assembly.GetName().Version.ToString()));
+                itemList.Add(new ListItem(style, "Application", VersionTracking.CurrentVersion));
+                itemList.Add(new ListItem(style, "Build", VersionTracking.CurrentBuild));
                 itemList.Add(new ListItem(style, "NurApi", typeof(NurApi).Assembly.GetName().Version.ToString()));
                 itemList.Add(new ListItem(style, "NurApi.SensorTag", typeof(SensorTag).Assembly.GetName().Version.ToString()));
                 itemList.Add(new ListItem(style, "NurApi.TidUtils", typeof(TIDUtils).Assembly.GetName().Version.ToString()));

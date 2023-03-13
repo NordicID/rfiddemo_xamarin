@@ -9,6 +9,7 @@ using NurApiDotNet;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using NurApiDotNet.TidUtils;
+using nur_tools_rfiddemo_xamarin.Models;
 
 namespace nur_tools_rfiddemo_xamarin.Views
 {
@@ -38,11 +39,11 @@ namespace nur_tools_rfiddemo_xamarin.Views
                                 
                 itemList.Add(new ListItem(style, "Company", tagInfo.Company));
                 itemList.Add(new ListItem(style, "Model", tagInfo.TagModel));                
-                itemList.Add(new ListItem(style, "Mask Designer Id (MDID)", (tagInfo.MDID_valid) ? tagInfo.MDID.ToString("X2") : "N/A"));
-                itemList.Add(new ListItem(style, "TagModelNumber (TMN)", (tagInfo.MDID_valid) ? tagInfo.MDID.ToString("X2") : "N/A"));
-                itemList.Add(new ListItem(style, "Extended ID (XTID)", (tagInfo.XTID_valid) ? tagInfo.XTID.ToString("X2") : "N/A"));
-                itemList.Add(new ListItem(style, "MCS", (tagInfo.MCS_valid) ? tagInfo.MCS.ToString("X2") : "N/A"));
-                itemList.Add(new ListItem(style, "Header", (tagInfo.Header_valid) ? tagInfo.Header.ToString("X2") : "N/A"));
+                itemList.Add(new ListItem(style, "Mask Designer Id (MDID)", tagInfo.MDID_valid ? tagInfo.MDID.ToString("X2") : "N/A"));
+                itemList.Add(new ListItem(style, "TagModelNumber (TMN)", tagInfo.TMN_valid ? tagInfo.TMN.ToString("X2") : "N/A"));
+                itemList.Add(new ListItem(style, "Extended ID (XTID)", tagInfo.XTID_valid ? tagInfo.XTID.ToString("X2") : "N/A"));
+                itemList.Add(new ListItem(style, "MCS", tagInfo.MCS_valid ? tagInfo.MCS.ToString("X2") : "N/A"));
+                itemList.Add(new ListItem(style, "Header", tagInfo.Header_valid ? tagInfo.Header.ToString("X2") : "N/A"));
                
                 itemList.Add(new ListItem(style, "FullTIDMem", NurApi.BinToHexString(tagInfo.FullTIDMemory)));
 
@@ -83,6 +84,22 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 itemList.Add(new ListItem(style, "EPC", tag.GetEpcString()));
                 itemList.Add(new ListItem(style, "DATA", tag.GetDataString()));
             });
+        }
+
+        async void OnExportClicked(object sender, EventArgs e)
+        {              
+            StringBuilder sb = new StringBuilder();
+
+            foreach (ListItem td in itemList)
+            {
+                sb.Append(td.ItemHeaderText);
+                sb.Append(",");
+                sb.Append(td.ItemValueText);                
+                sb.AppendLine();
+            }
+
+            await Utils.Export(this, "TagInfo", sb.ToString());
+
         }
 
         protected override void OnAppearing()

@@ -8,9 +8,10 @@
              BackgroundColor="White"
              x:Class="nur_tools_rfiddemo_xamarin.Views.InventoryPage">
     <NavigationPage.TitleView>
-        <StackLayout Orientation="Horizontal">
+        <StackLayout Orientation="Horizontal" VerticalOptions="Center">
             <Image Source="ic_inventory.png" WidthRequest="55"/>
             <Label Text="Inventory" VerticalOptions="Center" TextColor="Black" FontSize="Title" />
+            <ImageButton Source="ic_export.png" HeightRequest="40" WidthRequest="40" BackgroundColor="Transparent" Aspect="AspectFit" Clicked="OnExportClicked" HorizontalOptions="EndAndExpand" />
         </StackLayout>
     </NavigationPage.TitleView>
     <ContentPage.Content>

@@ -14,7 +14,7 @@ namespace nur_tools_rfiddemo_xamarin.Droid
 {
 	
 	
-	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Android.Build.Tasks", "13.1.0.5")]
+	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Android.Build.Tasks", "13.2.0.93")]
 	public partial class Resource
 	{
 		

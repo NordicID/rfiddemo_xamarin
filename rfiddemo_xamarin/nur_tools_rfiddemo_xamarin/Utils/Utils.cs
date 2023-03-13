@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Threading.Tasks;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace nur_tools_rfiddemo_xamarin
 {
@@ -64,6 +68,59 @@ namespace nur_tools_rfiddemo_xamarin
             }
 
             return val;
+        }
+
+        public static async Task Export(ContentPage page, string headerText, string items, string filetype = ".csv")
+        {
+            string fn = headerText + "_" + DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss") + filetype;
+            fn = fn.Replace(' ', '_');
+                        
+            if (DeviceInfo.Model.StartsWith("HH"))
+            {
+                var sharePath = "/storage/emulated/0/RFID_EXPORT/";
+
+                if (!File.Exists(sharePath))
+                {
+                    Directory.CreateDirectory(sharePath);
+                }
+
+                string filePath = Path.Combine(sharePath, fn);
+                File.WriteAllText(filePath, items);
+
+                bool response = await page.DisplayAlert("File write success!", headerText + Environment.NewLine + "wrote to " + Environment.NewLine + filePath, "OK", "Email..");
+
+                if (response == false)
+                {
+                    //If HH8x device has email account defined, inventory results are added to the body of email
+                    EmailMessage message = new EmailMessage();
+                    message.Subject = headerText;
+                    //List<string> list = new List<string>();
+                    //list.Add("mail@domain.com");
+                    //message.To = list;
+                    message.Body = items;
+                    await Email.ComposeAsync(message);
+                }
+
+                return;                               
+            }
+            else
+            {
+                //Allow user to select destination device offer..(whatsApp, email Dropbox..)
+                var file = Path.Combine(FileSystem.CacheDirectory, fn);
+                try
+                {
+                    File.WriteAllText(file, items);                               
+                    ShareFileRequest share = new ShareFileRequest();
+                    share.Title = "Share " + headerText;
+                    share.File = new ShareFile(file);
+                    await Share.RequestAsync(share);
+                }
+                catch (Exception ex1)
+                {
+                    await page.DisplayAlert("Share Error", ex1.Message, "OK");
+                    return;
+                }
+            }
         }
     }
 }

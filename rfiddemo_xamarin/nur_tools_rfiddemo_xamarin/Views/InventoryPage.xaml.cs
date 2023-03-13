@@ -13,6 +13,7 @@ using Rg.Plugins.Popup.Services;
 using nur_tools_rfiddemo_xamarin.Views.SettingsPages;
 using NurApiDotNet.TidUtils;
 using NurApiDotNet.TagCodec.TDT;
+using System.Text;
 
 namespace nur_tools_rfiddemo_xamarin.Views
 {
@@ -115,7 +116,21 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 App.Nur.TxLevel = origTx; //Put original back.
             }
         }
-                
+
+        private async void ReadUSER(Tag curTag)
+        {
+            try
+            {
+                //Let's try read user mem of current tag.
+                byte [] result = curTag.ReadTag(0,false,BANK_USER, 0, 4);
+                await DisplayAlert("Read succeed!", NurApi.BinToHexString(result), "OK");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Read Failed!", ex.Message, "OK");
+            }            
+        }
+
         private async void KillTag(Tag curTag)
         {            
             string killPWD = await DisplayPromptAsync("Kill tag", "Type Kill password", "OK", "Cancel", null, maxLength: 20, Keyboard.Numeric,"");
@@ -197,7 +212,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
             if (App.Nur.IsInventoryStreamRunning())
                 InventoryEnable(false); //Stop inventory and wait user selection
 
-            string[] arr = { "Locate", "TagInfo", "Write EPC", "Write USER mem", "Lock EPC memory", "Set Kill password", "Kill" };
+            string[] arr = { "Locate", "TagInfo", "Write EPC", "Write USER mem", "Read USER mem", "Lock EPC memory", "Set Kill password", "Kill" };
             string action = await DisplayActionSheet("Select Tag action", "Cancel", null, arr);
 
             if (action == "Locate")
@@ -205,7 +220,7 @@ namespace nur_tools_rfiddemo_xamarin.Views
                 //Show LocateTag popup
                 await PopupNavigation.Instance.PushAsync(new LocateTagPage(item.epc));
             }
-            if (action == "TagInfo")
+            else if (action == "TagInfo")
             {
                 //Read TID memory from selected tag and show TagInformation window.
                 try
@@ -218,13 +233,17 @@ namespace nur_tools_rfiddemo_xamarin.Views
                     await DisplayAlert("Operation Failed!", ex.Message, "OK");
                 }
             }
-            if (action == "Write EPC")
+            else if (action == "Write EPC")
             {
                 WriteEPC(item);
             }
-            if (action == "Write USER mem")
+            else if (action == "Write USER mem")
             {
                 WriteUSER(item);
+            }
+            else if (action == "Read USER mem")
+            {
+                ReadUSER(item);
             }
             else if (action == "Lock EPC memory")
             {
@@ -346,6 +365,44 @@ namespace nur_tools_rfiddemo_xamarin.Views
             {
                 await DisplayAlert("Operation failed!", ex.Message, "OK");
             }
+        }
+
+        async void OnExportClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                //Stop invectory if running
+                if (App.Nur.IsInventoryExRunning() || App.Nur.IsInventoryStreamRunning())
+                {
+                    InventoryEnable(false); 
+                }                
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Operation failed!", ex.Message, "OK");
+            }
+
+            if(tagDetails.Count == 0)
+            {
+                await DisplayAlert("Export", "Nothing to export!", "OK");
+                return;
+            }
+
+            //Gather inventory results
+            StringBuilder sb = new StringBuilder();
+
+            foreach(TagDetails td in tagDetails)
+            {
+                sb.Append(td.EPC);
+                sb.Append(",");                
+                sb.Append(td.Antenna);
+                sb.Append(",");
+                sb.Append(td.RSSI);
+                sb.AppendLine();
+            }
+
+            await Utils.Export(this,"Inventory",sb.ToString());
+
         }
 
         private string BuildEpcAndDataKeyString(Tag tag)
