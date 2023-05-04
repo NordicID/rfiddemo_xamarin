@@ -47,14 +47,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignKey>Apple Development: Ferhat Nordicid (AGB5G247MC)</CodesignKey>
+   <CodesignKey>
+    </CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>
     </CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchInterpreter>
     </MtouchInterpreter>
-    <CodesignProvision>VS: com.nordicid.rfiddemo.xamarin Development</CodesignProvision>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
     <CodesignExtraArgs />
     <CodesignResourceRules />
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
