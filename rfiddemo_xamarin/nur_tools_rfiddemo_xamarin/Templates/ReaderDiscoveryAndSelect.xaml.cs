@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -18,7 +17,7 @@ namespace nur_tools_rfiddemo_xamarin.Templates
 
         //Collection of device Uri's user can select to connect. Key to dictionary  will be "<device name>:<host address>"
         Dictionary<string, Uri> _uriList;
-                
+
         ListItemStyle style;
 
         public event EventHandler<SelectedReaderUriEventArgs> OnSelectedReaderUri;
@@ -26,13 +25,13 @@ namespace nur_tools_rfiddemo_xamarin.Templates
         public ReaderDiscoveryAndSelect()
         {
             InitializeComponent();
-                        
+
             _uriList = new Dictionary<string, Uri>();
             ReaderList.OnItemSelected += ReaderList_OnItemSelected;
-            style = new ListItemStyle("connection.png",40, Color.FromRgb(255,255, 255), Color.DarkBlue, Color.Black);                       
+            style = new ListItemStyle("connection.png", 40, Color.FromRgb(255, 255, 255), Color.DarkBlue, Color.Black);
             style.styleCellHeight = 60;
             style.styleSingleRow = false;
-            
+
             Refresh();
         }
 
@@ -43,13 +42,13 @@ namespace nur_tools_rfiddemo_xamarin.Templates
             lock (_uriList)
             {
                 if (arg.ItemIndex < _uriList.Count)
-                {                    
+                {
                     SelectedReaderUriEventArgs args = new SelectedReaderUriEventArgs(_uriList.ElementAt(arg.ItemIndex).Value);
                     OnSelectedReaderUri?.Invoke(this, args);
                 }
             }
         }
-        
+
         /// <summary>
         /// App may set "<ip>;<port>" as socket address of external reader and user can select from list. Then popup open to edit ip and port.
         /// </summary>
@@ -67,7 +66,7 @@ namespace nur_tools_rfiddemo_xamarin.Templates
         /// <returns>true if Uri added to list. false if already in list</returns>
         public bool AddUriToList(Uri uri, string name)
         {
-            lock(_uriList)
+            lock (_uriList)
             {
                 string key = name + uri.Host;
                 //Add Uri only if not already there..
@@ -76,7 +75,7 @@ namespace nur_tools_rfiddemo_xamarin.Templates
                     _uriList.Add(key, uri);
                     return true;
                 }
-                
+
                 return false;
             }
         }
@@ -86,8 +85,8 @@ namespace nur_tools_rfiddemo_xamarin.Templates
         /// </summary>
         public void Refresh()
         {
-            lock(_uriList)            
-                _uriList.Clear();            
+            lock (_uriList)
+                _uriList.Clear();
 
             lock (itemList)
                 itemList.Clear();
@@ -103,9 +102,9 @@ namespace nur_tools_rfiddemo_xamarin.Templates
                     style.styleValueColor = Color.Green;
                     itemList.Add(new ListItem(style, name, App.Nur.ConnectedDeviceUri.Host + " (Connected)"));
                     style.styleValueColor = Color.Black;
-                    AddUriToList(App.Nur.ConnectedDeviceUri, name);                    
+                    AddUriToList(App.Nur.ConnectedDeviceUri, name);
                 }
-                                
+
                 try
                 {
                     //Add possibility to create socket connection in to the External reader.
@@ -125,7 +124,7 @@ namespace nur_tools_rfiddemo_xamarin.Templates
         public void StartDiscovery()
         {
             try
-            {                    
+            {
                 NurDeviceDiscovery.Start(OnDeviceDiscovered);
             }
             catch (Exception e)
@@ -154,7 +153,7 @@ namespace nur_tools_rfiddemo_xamarin.Templates
                 if (args.Visible)
                 {
                     System.Diagnostics.Debug.WriteLine("OnDeviceDiscovered ADD " + name);
-                    if(!_uriList.ContainsKey(name+uri.Host))                    
+                    if (!_uriList.ContainsKey(name + uri.Host))
                     {
                         string txt = uri.GetAddress();
                         if (App.Nur.IsConnected() && App.Nur.ConnectedDeviceUri.Equals(uri))
@@ -165,7 +164,7 @@ namespace nur_tools_rfiddemo_xamarin.Templates
                         else
                         {
                             itemList.Add(new ListItem(style, name, txt));
-                            AddUriToList(uri, name);                            
+                            AddUriToList(uri, name);
                             style.styleValueColor = Color.Black;
                         }
                     }
@@ -173,7 +172,7 @@ namespace nur_tools_rfiddemo_xamarin.Templates
                 else
                 {
                     //At this point if device is not visible any more, we should remove it from the list. But we dont't do that here. List will be refreshed when reopening.
-                    System.Diagnostics.Debug.WriteLine("OnDeviceDiscovered Not visible " + name);                                                             
+                    System.Diagnostics.Debug.WriteLine("OnDeviceDiscovered Not visible " + name);
                 }
 
                 ReaderList.SetItemsSource(itemList);
@@ -190,13 +189,13 @@ namespace nur_tools_rfiddemo_xamarin.Templates
 
         public SelectedReaderUriEventArgs(Uri uri)
         {
-            this.selectedUri = uri;            
+            this.selectedUri = uri;
         }
 
         /// <summary>
         /// Selected Uri of reader
         /// </summary>
-        public Uri selectedUri;               
+        public Uri selectedUri;
 
     }
 }
