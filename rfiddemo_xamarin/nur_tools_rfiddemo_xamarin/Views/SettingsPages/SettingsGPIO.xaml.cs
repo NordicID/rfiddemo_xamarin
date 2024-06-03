@@ -6,6 +6,7 @@ using NurApiDotNet;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using System.Threading;
+using static NurApiDotNet.NurApi;
 
 namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
 {
@@ -157,7 +158,7 @@ namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
         private async void HandleGPIOSettings(int gpioIndex)
         {
             SettingsPages.SettingsGPIOItem gpioItem = new SettingsGPIOItem();
-            gpioItem.SetGPIOItem(gpio , gpioIndex);
+            gpioItem.SetGPIOItem(gpio, gpioIndex);
             await Navigation.PushAsync(gpioItem);
         }
 

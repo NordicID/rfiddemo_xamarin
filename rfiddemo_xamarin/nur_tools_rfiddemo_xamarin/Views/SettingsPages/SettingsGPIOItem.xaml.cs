@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using System.Collections.ObjectModel;
 using nur_tools_rfiddemo_xamarin.Templates;
+using static NurApiDotNet.NurApi;
 
 namespace nur_tools_rfiddemo_xamarin.Views.SettingsPages
 {
